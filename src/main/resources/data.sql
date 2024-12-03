@@ -1,9 +1,12 @@
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
 INSERT INTO authorities(id,authority) VALUES (1,'ADMIN');
+INSERT INTO authorities(id,authority) VALUES (2,'CLIENTE');
+INSERT INTO authorities(id,authority) VALUES (3,'INTERIORISTA');
+INSERT INTO authorities(id,authority) VALUES (4,'MONTADOR');
+
 INSERT INTO appusers(id,username,password,authority) VALUES (1,'admin1','$2a$10$nMmTWAhPTqXqLDJTag3prumFrAJpsYtroxf0ojesFYq0k4PmcbWUS',1);
 
 -- Three clinic owners, with password "clinic_owner"
-INSERT INTO authorities(id,authority) VALUES (2,'CLINIC_OWNER');
 INSERT INTO appusers(id,username,password,authority) VALUES (2,'clinicOwner1','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',2);
 INSERT INTO appusers(id,username,password,authority) VALUES (3,'clinicOwner2','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',2);
 
@@ -15,7 +18,6 @@ INSERT INTO clinics(id, name, address, telephone, plan, clinic_owner) VALUES (2,
 INSERT INTO clinics(id, name, address, telephone, plan, clinic_owner) VALUES (3, 'Clinic 3', 'Av. Reina Mercedes, 70', '955382238', 'BASIC', 2);
 
 -- Ten owner user, named owner1 with passwor 0wn3r
-INSERT INTO authorities(id,authority) VALUES (3,'OWNER');
 INSERT INTO appusers(id,username,password,authority) VALUES (4,'owner1','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',3);
 INSERT INTO appusers(id,username,password,authority) VALUES (5,'owner2','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',3);
 INSERT INTO appusers(id,username,password,authority) VALUES (6,'owner3','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',3);
@@ -29,7 +31,6 @@ INSERT INTO appusers(id,username,password,authority) VALUES (13,'owner10','$2a$1
 -- One vet user, named vet1 with passwor v3t
 /*INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (12,'vet1','veterinarian');*/
-INSERT INTO authorities(id,authority) VALUES (4,'VET');
 INSERT INTO appusers(id,username,password,authority) VALUES (14,'vet1','$2a$10$aeypcHWSf4YEkDAF0d.vjOLu94aS40MBUb4rOtDncFxZdo2wpkt8.',4);
 INSERT INTO appusers(id,username,password,authority) VALUES (15,'vet2','$2a$10$aeypcHWSf4YEkDAF0d.vjOLu94aS40MBUb4rOtDncFxZdo2wpkt8.',4);
 INSERT INTO appusers(id,username,password,authority) VALUES (16,'vet3','$2a$10$aeypcHWSf4YEkDAF0d.vjOLu94aS40MBUb4rOtDncFxZdo2wpkt8.',4);
@@ -111,3 +112,26 @@ INSERT INTO consultation_tickets(id,description,creation_date, user_id, consulta
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (6, 'Try to give him some tuna to check if he eats that.', '2023-04-11 15:20', 15, 3);
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (7, 'My lovebird doesn''t sing as my neighbour''s one.', '2023-02-24 12:30', 5, 4);
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (8, 'Lovebirds do not sing.', '2023-02-24 18:30', 16, 4);
+
+
+-- PROYECTO IR
+INSERT INTO appusers(id,username,password,authority) VALUES (101,'admin','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',1);
+INSERT INTO appusers(id,username,password,authority) VALUES (102,'cliente1','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',2);
+INSERT INTO appusers(id,username,password,authority) VALUES (103,'interiorista1','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',3);
+INSERT INTO appusers(id,username,password,authority) VALUES (104,'montador1','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',4);
+
+
+INSERT INTO admins (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
+VALUES (1, 'Juan', 'Perez', 'Antonio', 'Calle 123', '1234567890', 'HOMBRE', 101);
+
+
+INSERT INTO clientes (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
+VALUES (2, 'María', 'Gomez', 'Elena', 'Avenida 456', '0987654321', 'MUJER', 102);
+
+
+INSERT INTO interioristas (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
+VALUES (3, 'Carlos', 'Lopez', 'Javier', 'Plaza Central 789', '1122334455', 'HOMBRE', 103);
+
+
+INSERT INTO montadores (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
+VALUES (4, 'Ana', 'Martinez', 'Lucía', 'Boulevard 321', '5566778899', 'OTRO', 104);

@@ -1,7 +1,13 @@
 package org.springframework.samples.petclinic.auth.payload.request;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
+import org.springframework.samples.petclinic.IR.Sexo;
 import org.springframework.samples.petclinic.clinic.Clinic;
 
 import lombok.Getter;
@@ -25,15 +31,20 @@ public class SignupRequest {
 	@NotBlank
 	private String firstName;
 	
+	private String second_name;
+
 	@NotBlank
 	private String lastName;
 	
-	@NotBlank
-	private String city;
-	//Owner
+	//IR
 
-	private String address;
-	private String telephone;
-	private Clinic clinic;
+	
+	private String direccion;
+
+	
+	private String telefono;
+	
+
+    private Sexo sexo;
 
 }

@@ -6,6 +6,11 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.IR.ServiceDeKubico;
+import org.springframework.samples.petclinic.IR.administrador.Admin;
+import org.springframework.samples.petclinic.IR.cliente.Cliente;
+import org.springframework.samples.petclinic.IR.interiorista.Interiorista;
+import org.springframework.samples.petclinic.IR.montador.Montador;
 import org.springframework.samples.petclinic.auth.payload.request.SignupRequest;
 import org.springframework.samples.petclinic.clinic.ClinicService;
 import org.springframework.samples.petclinic.clinicowner.ClinicOwner;
@@ -32,10 +37,10 @@ public class AuthService {
 	private final VetService vetService;
 	private final ClinicOwnerService clinicOwnerService;
 	private final ClinicService clinicService;
-
+private final ServiceDeKubico serviceDeKubico;
 	@Autowired
 	public AuthService(PasswordEncoder encoder, AuthoritiesService authoritiesService, UserService userService,
-			OwnerService ownerService, VetService vetService, ClinicOwnerService clinicOwnerService, ClinicService clinicService) {
+			OwnerService ownerService, VetService vetService, ClinicOwnerService clinicOwnerService, ClinicService clinicService, ServiceDeKubico serviceDeKubico) {
 		this.encoder = encoder;
 		this.authoritiesService = authoritiesService;
 		this.userService = userService;
@@ -43,6 +48,7 @@ public class AuthService {
 		this.vetService = vetService;
 		this.clinicOwnerService = clinicOwnerService;
 		this.clinicService = clinicService;
+		this.serviceDeKubico = serviceDeKubico;
 	}
 
 	@Transactional
@@ -58,43 +64,54 @@ public class AuthService {
 			role = authoritiesService.findByAuthority("ADMIN");
 			user.setAuthority(role);
 			userService.saveUser(user);
+			Admin admin = new Admin();
+			admin.setFirstName(request.getFirstName());
+			admin.setSecond_name(request.getSecond_name());
+			admin.setLastName(request.getLastName());
+			admin.setDireccion(request.getDireccion());
+			admin.setTelefono(request.getTelefono());
+			admin.setSexo(request.getSexo());
+			// FALTARIA LLAMAR AL SERVICE Y QUE LO GUARDE
 			break;
-		case "vet":
-			role = authoritiesService.findByAuthority("VET");
+		
+		case "interiorista":
+			role = authoritiesService.findByAuthority("INTERIORISTA");
 			user.setAuthority(role);
 			userService.saveUser(user);
-			Vet vet = new Vet();
-			vet.setFirstName(request.getFirstName());
-			vet.setLastName(request.getLastName());
-			vet.setCity(request.getCity());
-			vet.setSpecialties(new ArrayList<Specialty>());
-			vet.setClinic(clinicService.findClinicById(request.getClinic().getId()));
-			vet.setUser(user);
-			vetService.saveVet(vet);
+			Interiorista interiorista = new Interiorista();
+			interiorista.setFirstName(request.getFirstName());
+			interiorista.setSecond_name(request.getSecond_name());
+			interiorista.setLastName(request.getLastName());
+			interiorista.setDireccion(request.getDireccion());
+			interiorista.setTelefono(request.getTelefono());
+			interiorista.setSexo(request.getSexo());
+			//SERVICE DEL INTERIORISTA
 			break;
-		case "clinic owner":
-			role = authoritiesService.findByAuthority("CLINIC_OWNER");
+		
+		case "cliente":
+			role = authoritiesService.findByAuthority("CLIENTE");
 			user.setAuthority(role);
 			userService.saveUser(user);
-			ClinicOwner clinicOwner = new ClinicOwner();
-			clinicOwner.setFirstName(request.getFirstName());
-			clinicOwner.setLastName(request.getLastName());
-			clinicOwner.setUser(user);
-			clinicOwnerService.saveClinicOwner(clinicOwner);
-			break;
+			Cliente cliente = new Cliente();
+			cliente.setFirstName(request.getFirstName());
+			cliente.setSecond_name(request.getSecond_name());
+			cliente.setLastName(request.getLastName());
+			cliente.setDireccion(request.getDireccion());
+			cliente.setTelefono(request.getTelefono());
+			cliente.setSexo(request.getSexo());
 		default:
-			role = authoritiesService.findByAuthority("OWNER");
+			role = authoritiesService.findByAuthority("MONTADOR");
 			user.setAuthority(role);
 			userService.saveUser(user);
-			Owner owner = new Owner();
-			owner.setFirstName(request.getFirstName());
-			owner.setLastName(request.getLastName());
-			owner.setAddress(request.getAddress());
-			owner.setCity(request.getCity());
-			owner.setTelephone(request.getTelephone());
-			owner.setClinic(clinicService.findClinicById(request.getClinic().getId()));
-			owner.setUser(user);
-			ownerService.saveOwner(owner);
+			Montador montador = new Montador();
+			montador.setFirstName(request.getFirstName());
+			montador.setSecond_name(request.getSecond_name());
+			montador.setLastName(request.getLastName());
+			montador.setDireccion(request.getDireccion());
+			montador.setTelefono(request.getTelefono());
+			montador.setSexo(request.getSexo());
+			
+			
 
 		}
 	}
