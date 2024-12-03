@@ -3,6 +3,8 @@ import '../App.css';
 import '../static/css/home/home.css'; 
 import tokenService from '../services/token.service.js';
 import { RiQuestionnaireLine } from "react-icons/ri";
+import ChatComponent from '../chat/ChatComponent'; // Si estás importando desde `frontend/src/home`
+
 
 export default function Home() {
     const usuario = tokenService.getUser();
@@ -19,6 +21,7 @@ export default function Home() {
                     zIndex: 9999        // Asegura que el ícono esté encima de otros elementos
                 }}>
                     <RiQuestionnaireLine style={{ color: 'red' }} />
+                    <ChatComponent/>
                 </div>
             }
         </div>
