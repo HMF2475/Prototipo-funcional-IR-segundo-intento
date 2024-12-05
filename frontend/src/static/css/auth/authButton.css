@@ -13,6 +13,34 @@
   cursor: pointer;
   outline: none;
 }
+.button-container { display: flex; justify-content: space-between; }
+
+.cancel{
+  padding: 1.3em 3em;
+  font-size: 12px;
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #151111;
+  background-color: #f00f0f;
+  border: solid 2px var(--main-green-color);
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+}
+
+.recuadro {
+    width:  600px;
+    height: 350px;
+    border: 2px solid #000;
+    background-color: #1a835b;
+    padding: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  
+}
 
 .auth-button:hover {
   background-color: var(--main-green-color);
