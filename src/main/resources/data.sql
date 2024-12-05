@@ -98,6 +98,7 @@ INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (7, 1, '
 INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (8, 2, '2013-01-03 9:45', 'neutered', 2);
 INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (9, 3, '2013-01-04 17:30', 'spayed', 3);
 
+
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (1, 'Consultation about vaccines', 0, 'ANSWERED', 1, 1, '2023-01-04 17:30');
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (2, 'My dog gets really nervous', 0, 'PENDING', 1, 1, '2022-01-02 19:30');
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (3, 'My cat does not eat', 0, 'PENDING', 2, 2, '2023-04-11 11:20');
@@ -135,3 +136,23 @@ VALUES (3, 'Carlos', 'Lopez', 'Javier', 'Plaza Central 789', '1122334455', 'HOMB
 
 INSERT INTO montadores (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
 VALUES (4, 'Ana', 'Martinez', 'Lucía', 'Boulevard 321', '5566778899', 'OTRO', 104);
+
+
+
+-- añadido:
+INSERT INTO disenio (id, tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (1,'Puerta', 'Corredera', 'Puerta acabado de vidrio templado', 2, 2.1, 1.5, 0.4, 'Diseño Vidrio 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (2,'Armario', 'Abatible', 'Armario de madera barnizada', 1, 2.0, 0.9, 0.5, 'Diseño Madera 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (3,'Armario', 'Corredera', 'Sin observaciones', 1, 2.2, 1.8, 0.6, 'Armario para la habitacion');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (4,'Vestidor', 'No', 'Sin observaciones', 1, 2.3, 1.0, 0.3, 'Diseño Minimalista 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (5,'Armario', 'Abatible', 'Con detalles artesanales', 2, 2.0, 1.2, 0.5, 'Diseño Rústico 1');
+
+
+INSERT INTO modulos(id, ancho, alto, fondo, iluminacion, pantalonero, zapatero, tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES 
+                   (1,   2.3,   3.4,   2.2,  'costado',       'no',     'no',      'blanco',       2,           3,           1);
+INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES (2,2.5, 3.5, 2.1, 'ninguna', 'no','no','negro', 2, 2, 2);
+INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES (3,2.6, 3.6, 2.6, 'ninguna', 'no','no','turquesa', 2,2, 3);
+ 
+
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (1,1500.00, 1, 2, 3, '2024-01-15', '2023-12-01', '2023-12-05', 'Pagado');
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (2,2500.00, 2, 1, 1, '2024-02-20', '2023-12-03', NULL, 'Pendiente de Pago');
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (3,3200.00, 3, 3, 2, '2024-03-10', '2023-12-02', NULL, 'Pendiente de Confirmación');
