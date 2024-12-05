@@ -1,9 +1,12 @@
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
 INSERT INTO authorities(id,authority) VALUES (1,'ADMIN');
+INSERT INTO authorities(id,authority) VALUES (2,'CLIENTE');
+INSERT INTO authorities(id,authority) VALUES (3,'INTERIORISTA');
+INSERT INTO authorities(id,authority) VALUES (4,'MONTADOR');
+
 INSERT INTO appusers(id,username,password,authority) VALUES (1,'admin1','$2a$10$nMmTWAhPTqXqLDJTag3prumFrAJpsYtroxf0ojesFYq0k4PmcbWUS',1);
 
 -- Three clinic owners, with password "clinic_owner"
-INSERT INTO authorities(id,authority) VALUES (2,'CLINIC_OWNER');
 INSERT INTO appusers(id,username,password,authority) VALUES (2,'clinicOwner1','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',2);
 INSERT INTO appusers(id,username,password,authority) VALUES (3,'clinicOwner2','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',2);
 
@@ -15,7 +18,6 @@ INSERT INTO clinics(id, name, address, telephone, plan, clinic_owner) VALUES (2,
 INSERT INTO clinics(id, name, address, telephone, plan, clinic_owner) VALUES (3, 'Clinic 3', 'Av. Reina Mercedes, 70', '955382238', 'BASIC', 2);
 
 -- Ten owner user, named owner1 with passwor 0wn3r
-INSERT INTO authorities(id,authority) VALUES (3,'OWNER');
 INSERT INTO appusers(id,username,password,authority) VALUES (4,'owner1','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',3);
 INSERT INTO appusers(id,username,password,authority) VALUES (5,'owner2','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',3);
 INSERT INTO appusers(id,username,password,authority) VALUES (6,'owner3','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',3);
@@ -29,7 +31,6 @@ INSERT INTO appusers(id,username,password,authority) VALUES (13,'owner10','$2a$1
 -- One vet user, named vet1 with passwor v3t
 /*INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (12,'vet1','veterinarian');*/
-INSERT INTO authorities(id,authority) VALUES (4,'VET');
 INSERT INTO appusers(id,username,password,authority) VALUES (14,'vet1','$2a$10$aeypcHWSf4YEkDAF0d.vjOLu94aS40MBUb4rOtDncFxZdo2wpkt8.',4);
 INSERT INTO appusers(id,username,password,authority) VALUES (15,'vet2','$2a$10$aeypcHWSf4YEkDAF0d.vjOLu94aS40MBUb4rOtDncFxZdo2wpkt8.',4);
 INSERT INTO appusers(id,username,password,authority) VALUES (16,'vet3','$2a$10$aeypcHWSf4YEkDAF0d.vjOLu94aS40MBUb4rOtDncFxZdo2wpkt8.',4);
@@ -97,6 +98,7 @@ INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (7, 1, '
 INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (8, 2, '2013-01-03 9:45', 'neutered', 2);
 INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (9, 3, '2013-01-04 17:30', 'spayed', 3);
 
+
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (1, 'Consultation about vaccines', 0, 'ANSWERED', 1, 1, '2023-01-04 17:30');
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (2, 'My dog gets really nervous', 0, 'PENDING', 1, 1, '2022-01-02 19:30');
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (3, 'My cat does not eat', 0, 'PENDING', 2, 2, '2023-04-11 11:20');
@@ -111,3 +113,46 @@ INSERT INTO consultation_tickets(id,description,creation_date, user_id, consulta
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (6, 'Try to give him some tuna to check if he eats that.', '2023-04-11 15:20', 15, 3);
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (7, 'My lovebird doesn''t sing as my neighbour''s one.', '2023-02-24 12:30', 5, 4);
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (8, 'Lovebirds do not sing.', '2023-02-24 18:30', 16, 4);
+
+
+-- PROYECTO IR
+INSERT INTO appusers(id,username,password,authority) VALUES (101,'admin','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',1);
+INSERT INTO appusers(id,username,password,authority) VALUES (102,'cliente1','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',2);
+INSERT INTO appusers(id,username,password,authority) VALUES (103,'interiorista1','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',3);
+INSERT INTO appusers(id,username,password,authority) VALUES (104,'montador1','$2a$10$t.I/C4cjUdUWzqlFlSddLeh9SbZ6d8wR7mdbeIRghT355/KRKZPAi',4);
+
+
+INSERT INTO admins (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
+VALUES (1, 'Juan', 'Perez', 'Antonio', 'Calle 123', '1234567890', 'HOMBRE', 101);
+
+
+INSERT INTO clientes (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
+VALUES (2, 'María', 'Gomez', 'Elena', 'Avenida 456', '0987654321', 'MUJER', 102);
+
+
+INSERT INTO interioristas (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
+VALUES (3, 'Carlos', 'Lopez', 'Javier', 'Plaza Central 789', '1122334455', 'HOMBRE', 103);
+
+
+INSERT INTO montadores (id, first_name, last_name, second_name, direccion, telefono, sexo, user_id)
+VALUES (4, 'Ana', 'Martinez', 'Lucía', 'Boulevard 321', '5566778899', 'OTRO', 104);
+
+
+
+-- añadido:
+INSERT INTO disenio (id, tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (1,'Puerta', 'Corredera', 'Puerta acabado de vidrio templado', 2, 2.1, 1.5, 0.4, 'Diseño Vidrio 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (2,'Armario', 'Abatible', 'Armario de madera barnizada', 1, 2.0, 0.9, 0.5, 'Diseño Madera 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (3,'Armario', 'Corredera', 'Sin observaciones', 1, 2.2, 1.8, 0.6, 'Armario para la habitacion');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (4,'Vestidor', 'No', 'Sin observaciones', 1, 2.3, 1.0, 0.3, 'Diseño Minimalista 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (5,'Armario', 'Abatible', 'Con detalles artesanales', 2, 2.0, 1.2, 0.5, 'Diseño Rústico 1');
+
+
+INSERT INTO modulos(id, ancho, alto, fondo, iluminacion, pantalonero, zapatero, tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES 
+                   (1,   2.3,   3.4,   2.2,  'costado',       'no',     'no',      'blanco',       2,           3,           1);
+INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES (2,2.5, 3.5, 2.1, 'ninguna', 'no','no','negro', 2, 2, 2);
+INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES (3,2.6, 3.6, 2.6, 'ninguna', 'no','no','turquesa', 2,2, 3);
+ 
+
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (1,1500.00, 1, 2, 3, '2024-01-15', '2023-12-01', '2023-12-05', 'Pagado');
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (2,2500.00, 2, 1, 1, '2024-02-20', '2023-12-03', NULL, 'Pendiente de Pago');
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (3,3200.00, 3, 3, 2, '2024-03-10', '2023-12-02', NULL, 'Pendiente de Confirmación');
