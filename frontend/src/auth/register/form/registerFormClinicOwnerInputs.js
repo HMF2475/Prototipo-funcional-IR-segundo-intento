@@ -1,6 +1,6 @@
 import { formValidators } from "../../../validators/formValidators";
 
-export const registerFormClinicOwnerInputs = [
+export const registerFormInputs = [
   {
     tag: "Username",
     name: "username",
@@ -33,4 +33,38 @@ export const registerFormClinicOwnerInputs = [
     isRequired: true,
     validators: [formValidators.notEmptyValidator],
   },
+  {
+    tag: "Second Name",
+    name: "Second Name",
+    type: "text",
+    defaultValue: null,
+    isRequired: false,
+    validators:[],
+  },
+  {
+    tag: "Direccion",
+    name: "Direccion",
+    type: "text",
+    defaultValue: null,
+    isRequired: false,
+    validators: [],
+  },
+  {
+    tag: "Telefono",
+    name: "Telefono",
+    type: "text",
+    defaultValue: null,
+    isRequired: false,
+    validators: [],
+  },
+  {
+    tag: "Sexo",
+    name: "Sexo",
+    type: "text",
+    defaultValue: null,
+    isRequired: false,
+    validators: [],
+  }
 ];
+
+

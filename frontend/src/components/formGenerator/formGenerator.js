@@ -1,7 +1,7 @@
 import "./css/formGenerator.css";
 import "filepond/dist/filepond.min.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-
+import { Link } from "react-router-dom";
 import {
   useState,
   useImperativeHandle,
@@ -161,10 +161,16 @@ const FormGenerator = forwardRef((props, ref) => {
           })}
         {props.childrenPosition === -1 && props.children}
       </form>
-
-      <button onClick={handleSubmit} className={`${props.buttonClassName}`}>
+  
+          
+        <button onClick={handleSubmit} className={`${props.buttonClassName}`}>
+        
         {props.buttonText}
       </button>
+      <Link className="cancel" to="/" style={{textDecoration: "none"}}>
+              Cancelar
+          </Link>
+  
     </div>
   );
 });

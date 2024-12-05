@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Alert } from "reactstrap";
+
 import FormGenerator from "../../components/formGenerator/formGenerator";
 import tokenService from "../../services/token.service";
 import "../../static/css/auth/authButton.css";
@@ -42,18 +43,23 @@ export default function Login() {
           <></>
         )}
 
-        <h1>Login</h1>
+        
+          <h1>Iniciar sesion</h1>
+          <div className="recuadro">
+            <div className="auth-form-container">
+              <FormGenerator
+                ref={loginFormRef}
+                inputs={loginFormInputs}
+                onSubmit={handleSubmit}
+                numberOfColumns={1}
+                listenEnterKey
+                buttonText="Login"
+                buttonClassName="auth-button"
+              />
+            
+          </div>
+          
 
-        <div className="auth-form-container">
-          <FormGenerator
-            ref={loginFormRef}
-            inputs={loginFormInputs}
-            onSubmit={handleSubmit}
-            numberOfColumns={1}
-            listenEnterKey
-            buttonText="Login"
-            buttonClassName="auth-button"
-          />
         </div>
       </div>
     );  
