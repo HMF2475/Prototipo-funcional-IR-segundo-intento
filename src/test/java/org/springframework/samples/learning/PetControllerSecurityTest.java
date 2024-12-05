@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.samples.petclinic.pet.PetRestController;
+import org.springframework.samples.kubico.pet.PetRestController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
@@ -24,7 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(SpringExtension.class)
 //@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ApplicationContext.class )
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, classes={org.springframework.samples.petclinic.KubicoApplication.class})
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, classes={org.springframework.samples.kubico.KubicoApplication.class})
 //@SpringBootTest(classes={com.lapots.game.monolith.web.GrandJourneyMonolithApplication.class})
 @DirtiesContext
 public class PetControllerSecurityTest {
