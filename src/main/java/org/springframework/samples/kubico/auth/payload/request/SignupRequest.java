@@ -1,8 +1,12 @@
 package org.springframework.samples.kubico.auth.payload.request;
 
-import org.springframework.samples.kubico.clinic.Clinic;
 
 import jakarta.validation.constraints.NotBlank;
+
+
+import org.springframework.samples.kubico.utilidades.Sexo;
+
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,15 +28,20 @@ public class SignupRequest {
 	@NotBlank
 	private String firstName;
 	
+	private String second_name;
+
 	@NotBlank
 	private String lastName;
 	
-	@NotBlank
-	private String city;
-	//Owner
+	//IR
 
-	private String address;
-	private String telephone;
-	private Clinic clinic;
+	
+	private String direccion;
+
+	
+	private String telefono;
+	
+
+    private Sexo sexo;
 
 }
