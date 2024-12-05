@@ -35,6 +35,9 @@ import org.springframework.samples.petclinic.pet.exceptions.DuplicatedPetNameExc
 import org.springframework.samples.petclinic.user.AuthoritiesService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.util.EntityUtils;
+import org.springframework.samples.petclinic.vet.Specialty;
+import org.springframework.samples.petclinic.vet.Vet;
+import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.transaction.annotation.Transactional;
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))

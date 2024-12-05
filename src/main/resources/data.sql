@@ -115,18 +115,19 @@ INSERT INTO consultation_tickets(id,description,creation_date, user_id, consulta
 
 
 -- añadido:
-INSERT INTO diseño (tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES ('Puerta', 'Corredera', 'Puerta acabado de vidrio templado', 2, 2.1, 1.5, 0.4, 'Diseño Vidrio 1');
-INSERT INTO diseño (tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES ('Armario', 'Abatible', 'Armario de madera barnizada', 1, 2.0, 0.9, 0.5, 'Diseño Madera 1');
-INSERT INTO diseño (tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES ('Armario', 'Corredera', 'Sin observaciones', 1, 2.2, 1.8, 0.6, 'Armario para la habitacion');
-INSERT INTO diseño (tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES ('Vestidor', 'No', 'Sin observaciones', 1, 2.3, 1.0, 0.3, 'Diseño Minimalista 1');
-INSERT INTO diseño (tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES ('Armario', 'Abatible', 'Con detalles artesanales', 2, 2.0, 1.2, 0.5, 'Diseño Rústico 1');
+INSERT INTO disenio (id, tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (1,'Puerta', 'Corredera', 'Puerta acabado de vidrio templado', 2, 2.1, 1.5, 0.4, 'Diseño Vidrio 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (2,'Armario', 'Abatible', 'Armario de madera barnizada', 1, 2.0, 0.9, 0.5, 'Diseño Madera 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (3,'Armario', 'Corredera', 'Sin observaciones', 1, 2.2, 1.8, 0.6, 'Armario para la habitacion');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (4,'Vestidor', 'No', 'Sin observaciones', 1, 2.3, 1.0, 0.3, 'Diseño Minimalista 1');
+INSERT INTO disenio (id,tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre) VALUES (5,'Armario', 'Abatible', 'Con detalles artesanales', 2, 2.0, 1.2, 0.5, 'Diseño Rústico 1');
 
 
-INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipoMaterial, numCajoneras,numBaldas, diseño) VALUES (1,2.3, 3.4, 2.2, 'costado', 'no','sin frente', 'blanco',2,2, 1);
-INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipoMaterial, numCajoneras,numBaldas, diseño) VALUES (2,2.5, 3.5, 2.1, 'ninguna', 'no','con frente', 'negro',2,2, 2);
-INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipoMaterial, numCajoneras,numBaldas, diseño) VALUES (3,2.6, 3.6, 2.6, 'ninguna', 'no','sin frente', 'negro',2,2, 3);
+INSERT INTO modulos(id, ancho, alto, fondo, iluminacion, pantalonero, zapatero, tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES 
+                   (1,   2.3,   3.4,   2.2,  'costado',       'no',     'no',      'blanco',       2,           3,           1);
+INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES (2,2.5, 3.5, 2.1, 'ninguna', 'no','no','negro', 2, 2, 2);
+INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES (3,2.6, 3.6, 2.6, 'ninguna', 'no','no','turquesa', 2,2, 3);
  
 
-INSERT INTO pedido (precio, cliente, interiorista, id_diseño, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (1500.00, 1, 2, 3, '2024-01-15', '2023-12-01', '2023-12-05', 'Pagado');
-INSERT INTO pedido (precio, cliente, interiorista, id_diseño, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (2500.00, 2, 1, 1, '2024-02-20', '2023-12-03', NULL, 'Pendiente de Pago');
-INSERT INTO pedido (precio, cliente, interiorista, id_diseño, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (3200.00, 3, 3, 2, '2024-03-10', '2023-12-02', NULL, 'Pendiente de Confirmación');
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (1,1500.00, 1, 2, 3, '2024-01-15', '2023-12-01', '2023-12-05', 'Pagado');
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (2,2500.00, 2, 1, 1, '2024-02-20', '2023-12-03', NULL, 'Pendiente de Pago');
+INSERT INTO pedido (id,precio, cliente, interiorista, disenio_id, fecha_estimada, fecha_pedido, fecha_pago, estado) VALUES (3,3200.00, 3, 3, 2, '2024-03-10', '2023-12-02', NULL, 'Pendiente de Confirmación');

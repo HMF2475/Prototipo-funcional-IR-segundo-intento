@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.diseño;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -17,10 +18,16 @@ public class Modulo extends BaseEntity {
     String iluminacion;
     String pantalonero;
     String zapatero;
+
+    @Column(name = "tipo_material")
     String tipoMaterial;
+
+    @Column(name = "num_cajoneras")
     Integer numCajoneras;
+
+    @Column(name = "num_baldas")
     Integer numBaldas;
 
     @ManyToOne
-    Integer diseño;
+    Disenio disenio;
 }

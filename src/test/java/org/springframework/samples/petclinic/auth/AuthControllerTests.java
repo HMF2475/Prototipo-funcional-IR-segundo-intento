@@ -21,6 +21,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.samples.petclinic.auth.AuthController;
+import org.springframework.samples.petclinic.auth.AuthService;
 import org.springframework.samples.petclinic.auth.payload.request.LoginRequest;
 import org.springframework.samples.petclinic.auth.payload.request.SignupRequest;
 import org.springframework.samples.petclinic.configuration.jwt.JwtUtils;

@@ -24,7 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(SpringExtension.class)
 //@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ApplicationContext.class )
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, classes={org.springframework.samples.petclinic.PetclinicApplication.class})
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, classes={org.springframework.samples.petclinic.KubicoApplication.class})
 //@SpringBootTest(classes={com.lapots.game.monolith.web.GrandJourneyMonolithApplication.class})
 @DirtiesContext
 public class PetControllerSecurityTest {

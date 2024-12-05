@@ -15,11 +15,10 @@
  */
 package org.springframework.samples.petclinic.vet;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
 import org.springframework.samples.petclinic.model.NamedEntity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 

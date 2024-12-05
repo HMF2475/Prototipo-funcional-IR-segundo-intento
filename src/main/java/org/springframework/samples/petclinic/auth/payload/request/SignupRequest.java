@@ -1,9 +1,8 @@
 package org.springframework.samples.petclinic.auth.payload.request;
 
-import jakarta.validation.constraints.NotBlank;
-
 import org.springframework.samples.petclinic.clinic.Clinic;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 

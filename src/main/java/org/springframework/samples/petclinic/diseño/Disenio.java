@@ -8,7 +8,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Diseño extends BaseEntity{
+public class Disenio extends BaseEntity{
     String tipo;
     String tipoPuerta;
     String observaciones;

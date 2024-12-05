@@ -17,6 +17,10 @@ package org.springframework.samples.petclinic.vet;
 
 import java.util.List;
 
+import org.springframework.samples.petclinic.clinic.Clinic;
+import org.springframework.samples.petclinic.model.Person;
+import org.springframework.samples.petclinic.user.User;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,11 +33,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotEmpty;
-
-import org.springframework.samples.petclinic.clinic.Clinic;
-import org.springframework.samples.petclinic.model.Person;
-import org.springframework.samples.petclinic.user.User;
-
 import lombok.Getter;
 import lombok.Setter;
 
