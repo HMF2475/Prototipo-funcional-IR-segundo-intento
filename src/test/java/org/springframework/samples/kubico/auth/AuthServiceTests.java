@@ -79,13 +79,12 @@ public class AuthServiceTests {
 
 	private SignupRequest createRequest(String auth, String username) {
 		SignupRequest request = new SignupRequest();
-		request.setAddress("prueba");
+		request.setDireccion("prueba");
 		request.setAuthority(auth);
-		request.setCity("prueba");
 		request.setFirstName("prueba");
 		request.setLastName("prueba");
 		request.setPassword("prueba");
-		request.setTelephone("123123123");
+		request.setTelefono("123123123");
 		request.setUsername(username);
 
 		if(auth == "OWNER" || auth == "VET") {
@@ -106,7 +105,6 @@ public class AuthServiceTests {
 			clinic.setTelephone("123456789");
 			clinic.setClinicOwner(clinicOwner);
 			clinicService.save(clinic);
-			request.setClinic(clinic);
 		}
 
 		return request;
