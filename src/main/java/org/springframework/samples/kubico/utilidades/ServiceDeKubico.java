@@ -1,5 +1,6 @@
 package org.springframework.samples.kubico.utilidades;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,9 +69,14 @@ public class ServiceDeKubico {
     }
 
 
+
     @Transactional
     public void deleteCliente(Cliente cliente) {
         clienteRepository.delete(cliente);
+    }
+    @Transactional
+    public void deleteDisenio(Disenio disenio) {
+        disenioRepository.delete(disenio);
     }
 
     @Transactional
@@ -163,6 +169,12 @@ public class ServiceDeKubico {
     @Transactional
     public Cliente saveCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
+    }
+
+    @Transactional
+    public Disenio saveDisenio(Disenio disenio, Integer userId) {
+        disenio.setCliente(findClienteByUserId(userId));
+        return disenioRepository.save(disenio);
     }
 
     // Guardar Interiorista
@@ -284,7 +296,7 @@ public class ServiceDeKubico {
     @Transactional(readOnly = true)
     public Disenio findDisenioByDisenioId(Integer disenioId) {
         return disenioRepository.findById(disenioId)
-            .orElseThrow(() -> new NotFoundException("No se encontró el diseño con ID " + disenioId));
+            .orElseThrow(() -> new NotFoundException("No se encontro el disenio con ID " + disenioId));
     }
 
     @Transactional(readOnly = true)
@@ -310,7 +322,9 @@ public class ServiceDeKubico {
         Pedido pedido = pedidoRepository.findById(pedidoId)
         .orElseThrow(() -> new NotFoundException("No se encontró el pedido con ID " + pedidoId));
         pedido.setEstado(estado);
-        
+        if(estado.equals(Estado.ACEPTADO)){
+            pedido.setMontador(montadorRepository.findById(1).get());
+        }
         
 
         return pedidoRepository.save(pedido);
@@ -319,26 +333,83 @@ public class ServiceDeKubico {
 
     //TODO CAMBIAR MODULOS
     @Transactional
-    public Disenio actualizarDisenio(Integer disenioId, String tipoPuerta, Double ancho, Double alto, Double fondo,  Integer numeroPuertas) {
+    public Disenio actualizarDisenio(Disenio disenioNuevo) {
         // Buscar el diseño por su ID
-        Disenio disenio = disenioRepository.findById(disenioId)
-        .orElseThrow(() -> new NotFoundException("No se encontró el diseño con ID " + disenioId));
+        Disenio disenio = disenioRepository.findById(disenioNuevo.getId())
+        .orElseThrow(() -> new NotFoundException("No se encontró el diseño con ID " + disenioNuevo.getId()));
 
         Double altoAntes = disenio.getAlto();
         Double anchoAntes = disenio.getAncho();
         Double fondoAntes = disenio.getFondo();
+        Double precioAntes =disenio.getPrecioEstimado();
+        LocalDate fechaAntes = disenio.getFechaEstimada();
        
-        disenio.setTipoPuerta(tipoPuerta);  
-        disenio.setAlto(alto);
-        disenio.setAncho(ancho);
-        disenio.setFondo(fondo);        
+        disenio.setTipoPuerta(disenioNuevo.getTipoPuerta());  
+        disenio.setAlto(disenioNuevo.getAlto());
+        disenio.setAncho(disenioNuevo.getAncho());
+        disenio.setFondo(disenioNuevo.getFondo());        
 
 
-        disenio.setNumPuertas(numeroPuertas);  
+        disenio.setNumPuertas(disenioNuevo.getNumPuertas());  
 
+        if(altoAntes>disenio.getAlto()){
+            disenio.setFechaEstimada(fechaAntes.plusDays(5));
+            disenio.setPrecioEstimado(precioAntes + 66.2);
+        }else if(altoAntes< disenio.getAlto()){
+            disenio.setFechaEstimada(fechaAntes.minusDays(3));
+            disenio.setPrecioEstimado(precioAntes - 12.99);
+        }
+
+        if(fondoAntes>disenio.getFondo()){
+            disenio.setFechaEstimada(fechaAntes.plusDays(5));
+            disenio.setPrecioEstimado(precioAntes + 66.2);
+        }else if(fondoAntes< disenio.getFondo()){
+            disenio.setFechaEstimada(fechaAntes.minusDays(3));
+            disenio.setPrecioEstimado(precioAntes - 12.99);
+        }
+        if(anchoAntes>disenio.getAncho()){
+            disenio.setFechaEstimada(fechaAntes.plusDays(5));
+            disenio.setPrecioEstimado(precioAntes + 66.2);
+        }else if(anchoAntes< disenio.getAncho()){
+            disenio.setFechaEstimada(fechaAntes.minusDays(3));
+            disenio.setPrecioEstimado(precioAntes - 12.99);
+        }
+        
         
 
         return disenioRepository.save(disenio);
+    }
+
+    @Transactional
+    public Disenio guardarDisenioNuevo(Disenio disenio){
+        return disenioRepository.save(disenio);
+
+    }
+
+    @Transactional
+    public Pedido guardarPedido(Pedido pedido){
+        return pedidoRepository.save(pedido);
+    }
+    
+
+    @Transactional
+    public Pedido encargarDisenio(Disenio disenioMandado){
+        Disenio disenio= actualizarDisenio(disenioMandado);
+        
+        Pedido pedido = new Pedido();
+        
+        pedido.setDisenio(disenio);
+        pedido.setCliente(disenio.getCliente());
+        pedido.setEstado(Estado.EN_REVISION);
+        pedido.setFechaEstimada(disenio.getFechaEstimada()!=null ? disenio.getFechaEstimada(): LocalDate.now().plusDays(23));
+        pedido.setFechaPedido(LocalDate.now());
+        pedido.setInteriorista(interioristaRepository.findById(1).get());
+        pedido.setPagado("40%");
+        pedido.setPrecio(disenio.getPrecioEstimado()!=null? disenio.getPrecioEstimado():700);
+        pedido.setReferencia("PEDIDOOOK");
+
+        return guardarPedido(pedido);
+        
     }
 
     
