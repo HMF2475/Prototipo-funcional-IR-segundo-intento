@@ -215,6 +215,59 @@ public class ControllerDeKubico {
         }
     }
 
+    @PutMapping("/perfil/editOtro")
+    public ResponseEntity<?> updateProfile(@RequestBody Perfil perfil, @RequestParam ("username") String username) {
+        // Obtiene el usuario actual
+        User currentUser = userService.findUser(username);
+    
+        // Actualiza los datos del usuario
+        User userToUpdate = new User();
+        userToUpdate.setPassword(perfil.getPassword());
+        userToUpdate.setUsername(perfil.getUsername());
+
+    
+        // Determinar el tipo de usuario asociado
+        Object usuario = serviceDeKubico.findByUserId(currentUser.getId());
+        String tipoUsuario = serviceDeKubico.getUserTypeById(currentUser.getId());
+    
+        switch (tipoUsuario) {
+            case "Cliente":
+                Cliente cliente = (Cliente) usuario;
+                updateClienteData(cliente, perfil);
+                serviceDeKubico.saveCliente(cliente);
+                break;
+    
+            case "Interiorista":
+                Interiorista interiorista = (Interiorista) usuario;
+                updateInterioristaData(interiorista, perfil);
+                serviceDeKubico.saveInteriorista(interiorista);
+                break;
+    
+            case "Montador":
+                Montador montador = (Montador) usuario;
+                updateMontadorData(montador, perfil);
+                serviceDeKubico.saveMontador(montador);
+                break;
+    
+            case "Admin":
+                Admin admin = (Admin) usuario;
+                updateAdminData(admin, perfil);
+                serviceDeKubico.saveAdmin(admin); // Crea un método saveAdmin si no existe.
+                break;
+    
+            default:
+                throw new NotFoundException("No se pudo determinar el tipo de usuario para actualizar el perfil.");
+        }
+    
+        // Actualizar la información del usuario
+        userService.updateUser(userToUpdate, currentUser.getId());
+    
+        // Verificar cambios de username o contraseña y responder en consecuencia
+       
+        return ResponseEntity.ok(relog); // Relog significa que el usuario debe volver a iniciar sesión
+        
+    }
+
     private void updateClienteData(Cliente cliente, Perfil perfil) {
         cliente.setDireccion(perfil.getDireccion());
         cliente.setTelefono(perfil.getTelefono());

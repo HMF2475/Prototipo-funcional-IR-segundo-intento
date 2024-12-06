@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Table, Form, Input, Label, Link} from 'reactstrap';
 import useFetchState from '../util/useFetchState';
 import tokenService from "../services/token.service";
 import getErrorModal from "../util/getErrorModal";
 import { useNavigate } from "react-router-dom";
+import FormGenerator from "./../components/formGenerator/formGenerator";
+import { registerFormInputs } from "../auth/register/form/registerFormClinicOwnerInputs";
 
 
 const jwt = tokenService.getLocalAccessToken();
@@ -15,14 +17,11 @@ export default function ListaUsuarios() {
     [], "/api/kubico/usuarios", jwt, setMessage, setVisible
   );
 
-
+const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
 
   const[perfil, setPerfil] = useState(null)
   const [mostrarDatosPerfil, setMostrarDatosPerfil] = useState(false);
-  // TODO
-  const handleAddUser = () => {
-    console.log('Añadir Usuario');
-  };
+ 
 
 
 
@@ -75,6 +74,57 @@ export default function ListaUsuarios() {
           
   };
 
+  let [type, setType] = useState(null);
+  let [authority, setAuthority] = useState(null);
+
+  const registerFormRef = useRef();
+
+  function handleButtonClick(event) {
+    const target = event.target;
+    let value = target.value;
+    if (value === "Back") value = null;
+    else setAuthority(value);
+    setType(value);
+  }
+
+  function handleSubmitForm({ values }) {
+
+    if(!registerFormRef.current.validate()) return;
+
+    const request = values;
+    request["authority"] = authority;
+    let state = "";
+
+    fetch("/api/v1/auth/signup", {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify(request),
+    })
+      .then( (response) =>{
+        setMessage(true)
+      })
+      .catch((message) => {
+        alert(message);
+      });
+  }
+  const AñadirUsuarioForm = ({ setAñadirUsuarioMostrar }) => (
+    <div className="auth-page-container">
+      <h1>Añadir usuario</h1>
+      <div className="auth-form-container">
+        <FormGenerator
+          ref={registerFormRef}
+          inputs={registerFormInputs}
+          onSubmit={handleSubmitForm}
+          numberOfColumns={1}
+          listenEnterKey
+          buttonText="Save"
+          buttonClassName="auth-button"
+        />
+        <Button onClick={() => setAñadirUsuarioMostrar(false)}>Volver</Button>
+      </div>
+    </div>
+  );
+  
   
   const handleViewDetails = (perfil) => {
         setPerfil(perfil)
@@ -94,7 +144,7 @@ export default function ListaUsuarios() {
         
     };
     
-    fetch("/api/kubico/perfil/edit", {
+    fetch("/api/kubico/perfil/editOtro?username=" + perfil.username , {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -139,12 +189,12 @@ export default function ListaUsuarios() {
     <div style={{ padding: '20px' }}>
       <h3>
         Lista de Usuarios{' '}
-        <Button color="success" onClick={handleAddUser}>
+        <Button color="success" onClick={() => setAñadirUsuarioMostrar(true)}>
           Añadir Usuario
         </Button>
       </h3>
       {message && <p style={{ color: 'red' }}>{message}</p>}
-      {!mostrarDatosPerfil &&<Table responsive striped bordered>
+      {!mostrarDatosPerfil && !añadirUsuarioMostrar&&<Table responsive striped bordered>
         <thead>
           <tr>
             <th>Nombre</th>
@@ -180,22 +230,12 @@ export default function ListaUsuarios() {
         
       {modal}
        
-            
+            <h3>Nombre de usuario: {perfil.username}</h3>
              <Form onSubmit={handleSubmit}>
               {/* Datos del Usuario */}
-              <div className="custom-form-input">
-                <Label for="username" className="custom-form-input-label">Nombre de usuario</Label>
-                <Input
-                  type="text"
-                  name="username"
-                  id="username"
-                  value={perfil.username || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
+              
               {perfil.authority !== "CLIENTE" && <div className="custom-form-input">
-                <Label for="authority" className="custom-form-input-label">Nombre de usuario</Label>
+                <Label for="authority" className="custom-form-input-label">Rol</Label>
                 <Input
                   type="text"
                   name="authority"
@@ -219,7 +259,7 @@ export default function ListaUsuarios() {
                 />
               </div>
               <div className="custom-form-input">
-                <Label for="second_name" className="custom-form-input-label">Segundo</Label>
+                <Label for="second_name" className="custom-form-input-label">Segundo nombre</Label>
                 <Input
                   type="text"
                   name="second_name"
@@ -285,6 +325,8 @@ export default function ListaUsuarios() {
             </Form>
           
           </>)}
+
+          {añadirUsuarioMostrar && !mostrarDatosPerfil &&<AñadirUsuarioForm setAñadirUsuarioMostrar={setAñadirUsuarioMostrar}/>}
     </div>
   );
 }
