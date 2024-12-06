@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import tokenService from "../services/token.service";
 import getErrorModal from "../util/getErrorModal";
 import useFetchState from "../util/useFetchState";
-import { Table, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { Table,  Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
 const jwt = tokenService.getLocalAccessToken();

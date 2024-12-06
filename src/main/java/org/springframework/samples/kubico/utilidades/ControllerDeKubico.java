@@ -284,6 +284,40 @@ public class ControllerDeKubico {
         return ResponseEntity.ok(disenio);
     }
 
+
+    @PutMapping("/disenios/{disenioId}")
+    public ResponseEntity<Disenio> actualizarDisenioById(@PathVariable Integer disenioId, @RequestBody Disenio disenioNuevo) {
+               
+            Disenio disenio = serviceDeKubico.actualizarDisenio(disenioNuevo);
+            return ResponseEntity.ok(disenio);       
+            
+    }
+    
+    @PostMapping("/disenios/{disenioId}")
+    public ResponseEntity<Pedido> encargarDisenioById(@PathVariable Integer disenioId, @RequestBody Disenio disenioNuevo) {
+
+            Pedido pedido = serviceDeKubico.encargarDisenio(disenioNuevo);
+            return ResponseEntity.ok(pedido);
+     
+    }
+
+    @PostMapping("/disenios")
+    public ResponseEntity<Disenio> crearDisenioNuevo( @RequestBody Disenio disenioNuevo) {
+        
+        Disenio disenio = serviceDeKubico.saveDisenio(disenioNuevo,userService.findCurrentUser().getId());
+        return ResponseEntity.ok(disenio);
+                
+    }
+
+
+    @DeleteMapping("/disenios/{disenioId}")
+    public ResponseEntity<MessageResponse> borrarDisenioById(@PathVariable Integer disenioId) {
+        Disenio disenio = serviceDeKubico.findDisenioByDisenioId(disenioId);
+        serviceDeKubico.deleteDisenio(disenio);
+        return new ResponseEntity<>(new MessageResponse("Disenio deleted!"), HttpStatus.OK);
+    }
+
+
     @GetMapping("/disenios")
     public ResponseEntity<List<Disenio>> getDiseniosById() {
         Integer currentUserId = userService.findCurrentUser().getId();

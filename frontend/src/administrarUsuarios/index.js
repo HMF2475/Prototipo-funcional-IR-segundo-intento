@@ -30,7 +30,7 @@ export default function ListaUsuarios() {
   useEffect(() => { //¿Hace falta que sea así?
     let intervalId;
 
-    function fetchPedidos() {
+    function fetchUsuarios() {
         
         fetch(
             '/api/kubico/usuarios',
@@ -47,9 +47,9 @@ export default function ListaUsuarios() {
                 
             })
     }
-    fetchPedidos();
+    fetchUsuarios();
 
-    intervalId = setInterval(fetchPedidos, 1000);
+    intervalId = setInterval(fetchUsuarios, 1000);
     
     return () => clearInterval(intervalId)
 },[borrarTrigger])

@@ -41,8 +41,33 @@ export default function Profile() {
         setVisible(true);
       });
   };
+  useEffect(() => { //¿Hace falta que sea así?
+    let intervalId;
 
-  // Ordenar los pedidos por fecha (si es necesario)
+    function fetchPedidos() {
+        
+        fetch(
+            '/api/kubico/pedidos',
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                  },
+            }
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                setPedidos(data);
+                
+            })
+    }
+    fetchPedidos();
+
+    intervalId = setInterval(fetchPedidos, 1000);
+    
+    return () => clearInterval(intervalId)
+},[ pedidoId])
+
 
   // Cerrar el modal de detalles
   const cerrarModal = () => {
@@ -69,7 +94,8 @@ export default function Profile() {
                 <thead>
                   <tr>
                     <th>Referencia</th>
-            
+                    <th>Interiorista</th>
+                    <th>Montador</th>
                     <th>Fecha del Pedido</th>
                     <th>Estado</th>
                     <th>Acciones</th>
@@ -79,7 +105,8 @@ export default function Profile() {
                   {pedidos.map((pedido) => (
                     <tr key={pedido.id}>
                       <td>{pedido.referencia}</td>
-                      <td>{pedido.cliente ? pedido.cliente.firstName + ' ' + pedido.cliente.lastName : 'Desconocido'}</td>
+                      <td>{pedido.interiorista ? pedido.interiorista.firstName + ' ' + pedido.interiorista.lastName : 'Desconocido'}</td>
+                      <td>{pedido.montador ? pedido.montador.firstName + ' ' + pedido.montador.lastName : 'No aplica'}</td>
                       <td>{new Date(pedido.fechaPedido).toLocaleDateString()}</td>
                       <td>{pedido.estado}</td>
                       <td>

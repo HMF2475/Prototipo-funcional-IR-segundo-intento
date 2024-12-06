@@ -28,7 +28,7 @@ public class Pedido  extends BaseEntity{
     Double precio;
  
 
-    @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST })
+    @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST })
 	@JoinColumn(name = "disenio_id", referencedColumnName = "id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
     Disenio disenio;

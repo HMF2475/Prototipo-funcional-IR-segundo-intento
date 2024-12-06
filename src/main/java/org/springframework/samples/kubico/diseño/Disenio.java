@@ -1,5 +1,7 @@
 package org.springframework.samples.kubico.diseño;
 
+import java.time.LocalDate;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.samples.kubico.cliente.Cliente;
@@ -24,6 +26,8 @@ public class Disenio extends BaseEntity{
     Double ancho;
     Double fondo;
     String nombre;
+    Double precioEstimado;
+    LocalDate fechaEstimada;
     
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST })
     @JoinColumn(name = "cliente_id", nullable = false)

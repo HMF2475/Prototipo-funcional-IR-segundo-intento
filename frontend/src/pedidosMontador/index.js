@@ -19,6 +19,33 @@ export default function Profile() {
     {}, "/api/kubico/pedidos", jwt, setMessage, setVisible
   );
 
+  useEffect(() => { //¿Hace falta que sea así?
+    let intervalId;
+
+    function fetchPedidos() {
+        
+        fetch(
+            '/api/kubico/pedidos',
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                  },
+            }
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                setPedidos(data);
+                
+            })
+    }
+    fetchPedidos();
+
+    intervalId = setInterval(fetchPedidos, 1000);
+    
+    return () => clearInterval(intervalId)
+},[ pedidoId])
+
   const modal = getErrorModal(setVisible, visible, message);
   const navigate = useNavigate();
 
