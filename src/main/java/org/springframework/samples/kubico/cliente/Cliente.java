@@ -41,7 +41,7 @@ public class Cliente extends Person{
     @Enumerated(EnumType.STRING)
     protected Sexo sexo;
 
-    @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST })
+    @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST})
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User user;
