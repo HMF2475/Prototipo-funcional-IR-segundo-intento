@@ -22,12 +22,14 @@ import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.kubico.exceptions.AccessDeniedException;
 import org.springframework.samples.kubico.exceptions.ResourceNotFoundException;
 import org.springframework.samples.kubico.owner.Owner;
 import org.springframework.samples.kubico.vet.Vet;
 import org.springframework.samples.kubico.vet.VetService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,16 +37,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
 	private UserRepository userRepository;
-
+	private final PasswordEncoder encoder;
 //	private OwnerService ownerService;
 //
 	private VetService vetService;
 
 	@Autowired
-	public UserService(UserRepository userRepository, VetService vetService) {
+	public UserService(UserRepository userRepository, VetService vetService, PasswordEncoder encoder) {
 		this.userRepository = userRepository;
 //		this.ownerService = ownerService;
 		this.vetService = vetService;
+		this.encoder = encoder;
 	}
 
 	@Transactional
@@ -120,6 +123,25 @@ public class UserService {
 //		this.userRepository.deleteOwnerRelation(id);
 //		this.userRepository.deleteVetRelation(id);
 		this.userRepository.delete(toDelete);
+	}
+
+	@Transactional(rollbackFor = {AccessDeniedException.class})
+	public User updateCurrentUser(@Valid User user){
+		User currentUser = findCurrentUser();
+		if(currentUser == null) {
+            throw new AccessDeniedException("Tu usuario no ha sido encontrado");
+        }
+		
+        if(!existsUser(user.getUsername()) || (existsUser(user.getUsername()) && (user.getUsername().equals(currentUser.getUsername())))){
+            currentUser.setUsername(user.getUsername());
+            if(!(user.getPassword()==null)) {
+                currentUser.setPassword(encoder.encode(user.getPassword()));
+            }
+            saveUser(currentUser);
+            return currentUser;
+        }else{
+            throw new AccessDeniedException("Ese nombre está en uso");
+        } 
 	}
 
 	private void deleteRelations(Integer id, String auth) {

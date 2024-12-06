@@ -27,6 +27,7 @@ public interface UserRepository extends  CrudRepository<User, Integer>{
 	@Query("SELECT v FROM Vet v WHERE v.user.id = :userId")
 	Optional<Vet> findVetByUser(int userId);
 
+
 	Optional<User> findByUsername(String username);
 
 	Boolean existsByUsername(String username);

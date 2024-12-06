@@ -69,7 +69,7 @@ private final ServiceDeKubico serviceDeKubico;
 			admin.setDireccion(request.getDireccion());
 			admin.setTelefono(request.getTelefono());
 			admin.setSexo(request.getSexo());
-			// FALTARIA LLAMAR AL SERVICE Y QUE LO GUARDE
+			serviceDeKubico.saveAdmin(admin);
 			break;
 		
 		case "interiorista":
@@ -83,7 +83,7 @@ private final ServiceDeKubico serviceDeKubico;
 			interiorista.setDireccion(request.getDireccion());
 			interiorista.setTelefono(request.getTelefono());
 			interiorista.setSexo(request.getSexo());
-			//SERVICE DEL INTERIORISTA
+			serviceDeKubico.saveInteriorista(interiorista);
 			break;
 		
 		case "cliente":
@@ -97,6 +97,7 @@ private final ServiceDeKubico serviceDeKubico;
 			cliente.setDireccion(request.getDireccion());
 			cliente.setTelefono(request.getTelefono());
 			cliente.setSexo(request.getSexo());
+			serviceDeKubico.saveCliente(cliente);
 		default:
 			role = authoritiesService.findByAuthority("MONTADOR");
 			user.setAuthority(role);
@@ -108,6 +109,7 @@ private final ServiceDeKubico serviceDeKubico;
 			montador.setDireccion(request.getDireccion());
 			montador.setTelefono(request.getTelefono());
 			montador.setSexo(request.getSexo());
+			serviceDeKubico.saveMontador(montador);
 			
 			
 

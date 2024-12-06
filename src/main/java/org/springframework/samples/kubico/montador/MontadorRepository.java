@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface MontadorRepository extends CrudRepository<Montador, Integer> {
 
-    @Query("SELECT DISTINCT montador FROM Montadores montador WHERE montador.user.id = :userId")
+    @Query("SELECT DISTINCT montador FROM Montador montador WHERE montador.user.id = :userId")
 	public Optional<Montador> findByUser(int userId);
 
 

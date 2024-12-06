@@ -6,9 +6,9 @@ export default function Home(){
     return(
         <div className="home-page-container">
             <div className="hero-div">
-                <h1>Petclinic</h1>
+                <h1>Kubico</h1>
                 <h3>---</h3>
-                <h3>Find the best vet for your pet</h3>                
+                <h3>Haz los mejores muebles al mejor precio y a tu gusto</h3>                
             </div>
         </div>
     );

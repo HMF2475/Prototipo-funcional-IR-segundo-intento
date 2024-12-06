@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface InterioristaRepository extends CrudRepository<Interiorista, Integer> {
 
-    @Query("SELECT DISTINCT interiorista FROM Interioristas interiorista WHERE interiorista.user.id = :userId")
+    @Query("SELECT DISTINCT interiorista FROM Interiorista interiorista WHERE interiorista.user.id = :userId")
 	public Optional<Interiorista> findByUser(int userId);
 
 
