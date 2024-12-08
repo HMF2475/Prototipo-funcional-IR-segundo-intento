@@ -18,17 +18,19 @@ const Logout = () => {
   return (
     <div className="auth-page-container">
       <div className="auth-form-container">
+      <div className="recuadro-logout">
         <h2 className="text-center text-md">
           Are you sure you want to log out?
         </h2>
         <div className="options-row">
-          <Link className="auth-button" to="/" style={{textDecoration: "none"}}>
-            No
+          <Link className="auth-button-cancelar" to="/" style={{textDecoration: "none"}}>
+            Cancelar
           </Link>
-          <button className="auth-button" onClick={() => sendLogoutRequest()}>
-            Yes
+          <button className="auth-button-aceptar" onClick={() => sendLogoutRequest()}>
+            Aceptar
           </button>
         </div>
+      </div>
       </div>
     </div>
   );
