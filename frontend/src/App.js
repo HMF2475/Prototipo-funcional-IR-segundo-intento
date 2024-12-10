@@ -128,6 +128,7 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Perfil />}/>
+        <Route path="/home" element={<Home />}/>
       </>
     )
   }
