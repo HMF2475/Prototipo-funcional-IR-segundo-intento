@@ -3,7 +3,7 @@ import '../App.css';
 import '../static/css/home/home.css';
 import tokenService from '../services/token.service.js';
 import { RiQuestionnaireLine } from "react-icons/ri";
-import ChatComponent from '../chat/ChatComponent';
+import ChatComponent from '../SmallChat/ChatComponent.js';
 import { Link } from 'react-router-dom';
 
 export default function Home() {

@@ -5,48 +5,12 @@ import { ErrorBoundary } from "react-error-boundary";
 import AppNavbar from "./AppNavbar";
 import Home from "./home";
 import PrivateRoute from "./privateRoute";
-import PricingPlan from "./owner/plan";
 import Register from "./auth/register";
 import Login from "./auth/login";
 import Logout from "./auth/logout";
-import OwnerPetList from "./owner/pets/petList";
-import OwnerPetEdit from "./owner/pets/petEdit";
-import OwnerVisitEdit from "./owner/visits/visitEdit";
 import PlanList from "./public/plan";
 import tokenService from "./services/token.service";
-import OwnerDashboard from "./owner/dashboard";
-import OwnerConsultationList from "./owner/consultations/consultationList";
-import OwnerConsultationEdit from "./owner/consultations/consultationEdit";
-import OwnerConsultationTickets from "./owner/consultations/tickets/ticketList";
-import VetConsultationList from "./vet/consultations/consultationList";
-import VetConsultationTickets from "./vet/consultations/tickets/ticketList";
-import PetEditAdmin from "./admin/pets/PetEditAdmin";
-import PetListAdmin from "./admin/pets/PetListAdmin";
-import UserListAdmin from "./admin/users/UserListAdmin";
-import UserEditAdmin from "./admin/users/UserEditAdmin";
-import OwnerListAdmin from "./admin/owners/OwnerListAdmin";
-import OwnerEditAdmin from "./admin/owners/OwnerEditAdmin";
-import SpecialtyListAdmin from "./admin/vets/SpecialtyListAdmin";
-import SpecialtyEditAdmin from "./admin/vets/SpecialtyEditAdmin";
-import VetListAdmin from "./admin/vets/VetListAdmin";
-import VetEditAdmin from "./admin/vets/VetEditAdmin";
-import VisitListAdmin from "./admin/visits/VisitListAdmin";
-import VisitEditAdmin from "./admin/visits/VisitEditAdmin";
-import ConsultationListAdmin from "./admin/consultations/ConsultationListAdmin";
-import TicketListAdmin from "./admin/consultations/TicketListAdmin";
-import ConsultationEditAdmin from "./admin/consultations/ConsultationEditAdmin";
 import SwaggerDocs from "./public/swagger";
-import ClinicsList from "./clinicOwner/clinicsList"
-import EditClinic from "./clinicOwner/clinicEdit"
-import OwnerListClinicOwner from "./clinicOwner/ownersList"
-import ClinicOwnerListAdmin from "./admin/clinicOwners/ClinicOwnerListAdmin";
-import ClinicOwnerEditAdmin from "./admin/clinicOwners/ClinicOwnerEditAdmin";
-import ClinicListAdmin from "./admin/clinics/ClinicListAdmin";
-import ClinicEditAdmin from "./admin/clinics/ClinicEditAdmin";
-import ConsultationListClinicOwner from "./clinicOwner/consultations/ConsultationListClinicOwner";
-import ConsultationEditClinicOwner from "./clinicOwner/consultations/ConsultationEditClinicOwner";
-import VetListClinicOwner from "./clinicOwner/vets/VetListClinicOwner";
-import VetEditClinicOwner from "./clinicOwner/vets/VetEditClinicOwner";
 import MisDiseños from "./diseños"
 import PedidosCliente from "./pedidosCliente"
 import PedidosMontador from "./pedidosMontador"
@@ -54,7 +18,8 @@ import PedidosInteriorista from "./pedidosInteriorista"
 import TodosLosPedidos from "./pedidosAdmin"
 import AdministrarUsuarios from "./administrarUsuarios"
 import Perfil from "./mi perfil"
-import Chats from "./chats"
+import ChatPage from "./chats"
+import OpenChat from "./chats"
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -104,7 +69,8 @@ function App() {
       interioristaRoutes = (
         <>
           <Route path="/pedidosInteriorista" exact={true} element={<PrivateRoute><PedidosInteriorista /></PrivateRoute>} />  
-          <Route path="/chats" exact={true} element={<PrivateRoute><Chats /></PrivateRoute>} />  
+          <Route path="/chats" exact={true} element={<PrivateRoute><ChatPage /></PrivateRoute>} />  
+          <Route path="/chat/:id" element={<OpenChat />} />
         </>)
     }
     if (role === "MONTADOR") {

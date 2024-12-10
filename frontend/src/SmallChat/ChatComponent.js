@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ChatComponent.css';
 
-const ChatComponent = ({ closeChat }) => { // Recibe la función closeChat como prop
+const ChatComponent = ({ closeChat }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
