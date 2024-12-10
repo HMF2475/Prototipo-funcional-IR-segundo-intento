@@ -1,22 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ChatComponent.css';
 
-const ChatComponent = () => {
-  // Predefinir los mensajes del chat
-  const messages = [
-    { user: 'Usuario', text: 'Hola, ¿cómo estás?', timestamp: '10:00 AM' },
-    { user: 'Amigo', text: '¡Hola! Todo bien, ¿y tú?', timestamp: '10:02 AM' },
-    { user: 'Usuario', text: 'Estoy bien, gracias por preguntar. ¿Qué has estado haciendo?', timestamp: '10:03 AM' },
-    { user: 'Amigo', text: 'He estado trabajando en un proyecto. ¿Y tú?', timestamp: '10:05 AM' },
-    { user: 'Usuario', text: 'Lo mismo, un poco de trabajo y descansando. ¿Te gustaría salir este fin de semana?', timestamp: '10:06 AM' },
-    { user: 'Amigo', text: '¡Claro! Me encantaría. ¿A qué hora?', timestamp: '10:08 AM' }
-  ];
+const ChatComponent = ({ closeChat }) => { // Recibe la función closeChat como prop
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+
+  const handleSendMessage = () => {
+    if (newMessage.trim() === '') return;
+
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const userMessage = { user: 'Usuario', text: newMessage, timestamp };
+
+    setMessages([...messages, userMessage]);
+    setNewMessage('');
+
+    setTimeout(() => {
+      const botResponse = { user: 'Amigo', text: 'Será atendido en breves instantes...', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+      setMessages((prevMessages) => [...prevMessages, botResponse]);
+    }, 3000);
+  };
 
   return (
     <div className="chat-container">
-      <div className="chat-header">
-        <h2>Chat con Amigo</h2>
-      </div>
+<div className="chat-header">
+  <h2>Chat</h2>
+  <button className="close-chat-button" onClick={closeChat} title="Cerrar chat">×</button>
+</div>
+
       <div className="chat-box">
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.user === 'Usuario' ? 'user' : 'friend'}`}>
@@ -27,10 +37,17 @@ const ChatComponent = () => {
           </div>
         ))}
       </div>
-      <div className="chat-input">
-        <input type="text" placeholder="Escribe un mensaje..." />
-        <button>Enviar</button>
+      <div className="chat-input" >
+        <input
+          type="text"
+          placeholder="Escribe un mensaje..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+        />
+        <button onClick={handleSendMessage}>Enviar</button>
       </div>
+      
     </div>
   );
 };
