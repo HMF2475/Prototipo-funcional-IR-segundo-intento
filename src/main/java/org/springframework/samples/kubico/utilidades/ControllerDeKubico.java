@@ -15,6 +15,8 @@ import org.springframework.samples.kubico.interiorista.Interiorista;
 import org.springframework.samples.kubico.montador.Montador;
 import org.springframework.samples.kubico.pedido.Estado;
 import org.springframework.samples.kubico.pedido.Pedido;
+import org.springframework.samples.kubico.user.Authorities;
+import org.springframework.samples.kubico.user.AuthoritiesService;
 import org.springframework.samples.kubico.user.User;
 import org.springframework.samples.kubico.user.UserService;
 import org.springframework.samples.kubico.util.RestPreconditions;
@@ -30,10 +32,12 @@ public class ControllerDeKubico {
 
     private final ServiceDeKubico serviceDeKubico;
     private final UserService userService;
+    private final AuthoritiesService authoritiesService;
     @Autowired
-    public ControllerDeKubico(ServiceDeKubico serviceDeKubico, UserService userService) {
+    public ControllerDeKubico(ServiceDeKubico serviceDeKubico, UserService userService, AuthoritiesService authoritiesService) {
         this.serviceDeKubico = serviceDeKubico;
         this.userService = userService;
+        this.authoritiesService = authoritiesService;
     }
 
 
@@ -220,11 +224,8 @@ public class ControllerDeKubico {
         // Obtiene el usuario actual
         User currentUser = userService.findUser(username);
     
-        // Actualiza los datos del usuario
-        User userToUpdate = new User();
-        userToUpdate.setPassword(perfil.getPassword());
-        userToUpdate.setUsername(perfil.getUsername());
 
+    
     
         // Determinar el tipo de usuario asociado
         Object usuario = serviceDeKubico.findByUserId(currentUser.getId());
@@ -234,24 +235,28 @@ public class ControllerDeKubico {
             case "Cliente":
                 Cliente cliente = (Cliente) usuario;
                 updateClienteData(cliente, perfil);
+
                 serviceDeKubico.saveCliente(cliente);
                 break;
     
             case "Interiorista":
                 Interiorista interiorista = (Interiorista) usuario;
                 updateInterioristaData(interiorista, perfil);
+
                 serviceDeKubico.saveInteriorista(interiorista);
                 break;
     
             case "Montador":
                 Montador montador = (Montador) usuario;
                 updateMontadorData(montador, perfil);
+                
                 serviceDeKubico.saveMontador(montador);
                 break;
     
             case "Admin":
                 Admin admin = (Admin) usuario;
                 updateAdminData(admin, perfil);
+  
                 serviceDeKubico.saveAdmin(admin); // Crea un método saveAdmin si no existe.
                 break;
     
@@ -260,9 +265,63 @@ public class ControllerDeKubico {
         }
     
         // Actualizar la información del usuario
-        userService.updateUser(userToUpdate, currentUser.getId());
+        
     
         // Verificar cambios de username o contraseña y responder en consecuencia
+       
+        return ResponseEntity.ok(relog); // Relog significa que el usuario debe volver a iniciar sesión
+        
+    }
+
+    @PostMapping("/perfil/crearOtro")
+    public ResponseEntity<?> crearProfile(@RequestBody Perfil perfil) {
+        // Obtiene el usuario actual
+        if(userService.existsUser(perfil.getUsername())) throw new IllegalArgumentException("Ya existe");
+    
+        
+        User userToUpdate = new User();
+        
+        userToUpdate.setPassword(perfil.getPassword());
+        userToUpdate.setUsername(perfil.getUsername());
+        userToUpdate.setAuthority(authoritiesService.findByAuthority(perfil.getAuthority().toUpperCase()));
+        userService.saveUser(userToUpdate);
+        
+    
+        // Determinar el tipo de usuario asociado
+
+    
+        switch (perfil.getAuthority().toLowerCase()) {
+            case "cliente":
+                Cliente cliente = new Cliente();
+                updateClienteData(cliente, perfil);
+                cliente.setUser(userToUpdate);
+                serviceDeKubico.saveCliente(cliente);
+                break;
+    
+            case "interiorista":
+                Interiorista interiorista = new Interiorista();
+                updateInterioristaData(interiorista, perfil);
+                interiorista.setUser(userToUpdate);
+                serviceDeKubico.saveInteriorista(interiorista);
+                break;
+    
+            case "montador":
+                Montador montador =  new Montador();
+                updateMontadorData(montador, perfil);
+                montador.setUser(userToUpdate);
+                serviceDeKubico.saveMontador(montador);
+                break;
+    
+            case "admin":
+                Admin admin = new Admin();
+                updateAdminData(admin, perfil);
+                admin.setUser(userToUpdate);
+                serviceDeKubico.saveAdmin(admin); // Crea un método saveAdmin si no existe.
+                break;
+    
+            default:
+                throw new NotFoundException("No se pudo determinar el tipo de usuario para actualizar el perfil.");
+        }
        
         return ResponseEntity.ok(relog); // Relog significa que el usuario debe volver a iniciar sesión
         

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-    Navbar, NavbarBrand, NavLink, NavItem, Nav, NavbarToggler, Collapse, Dropdown, DropdownToggle, DropdownMenu, DropdownItem 
+    Navbar, NavbarBrand, NavLink, NavItem, Nav, NavbarToggler, Collapse, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, NavbarText
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import tokenService from './services/token.service';

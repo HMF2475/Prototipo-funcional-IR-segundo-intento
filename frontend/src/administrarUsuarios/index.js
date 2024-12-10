@@ -5,7 +5,6 @@ import tokenService from "../services/token.service";
 import getErrorModal from "../util/getErrorModal";
 import { useNavigate } from "react-router-dom";
 import FormGenerator from "./../components/formGenerator/formGenerator";
-import { registerFormInputs } from "../auth/register/form/registerFormClinicOwnerInputs";
 
 
 const jwt = tokenService.getLocalAccessToken();
@@ -18,7 +17,7 @@ export default function ListaUsuarios() {
   );
 
 const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
-
+  const [perfilNuevo, setPerfilNuevo] = useState({})
   const[perfil, setPerfil] = useState(null)
   const [mostrarDatosPerfil, setMostrarDatosPerfil] = useState(false);
  
@@ -46,9 +45,12 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
                 
             })
     }
-    fetchUsuarios();
+    if(!añadirUsuarioMostrar){
+      fetchUsuarios();
 
-    intervalId = setInterval(fetchUsuarios, 1000);
+      intervalId = setInterval(fetchUsuarios, 1000);
+    }
+    
     
     return () => clearInterval(intervalId)
 },[borrarTrigger])
@@ -74,56 +76,11 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
           
   };
 
-  let [type, setType] = useState(null);
-  let [authority, setAuthority] = useState(null);
 
-  const registerFormRef = useRef();
 
-  function handleButtonClick(event) {
-    const target = event.target;
-    let value = target.value;
-    if (value === "Back") value = null;
-    else setAuthority(value);
-    setType(value);
-  }
 
-  function handleSubmitForm({ values }) {
 
-    if(!registerFormRef.current.validate()) return;
 
-    const request = values;
-    request["authority"] = authority;
-    let state = "";
-
-    fetch("/api/v1/auth/signup", {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify(request),
-    })
-      .then( (response) =>{
-        setMessage(true)
-      })
-      .catch((message) => {
-        alert(message);
-      });
-  }
-  const AñadirUsuarioForm = ({ setAñadirUsuarioMostrar }) => (
-    <div className="auth-page-container">
-      <h1>Añadir usuario</h1>
-      <div className="auth-form-container">
-        <FormGenerator
-          ref={registerFormRef}
-          inputs={registerFormInputs}
-          onSubmit={handleSubmitForm}
-          numberOfColumns={1}
-          listenEnterKey
-          buttonText="Save"
-          buttonClassName="auth-button"
-        />
-        <Button onClick={() => setAñadirUsuarioMostrar(false)}>Volver</Button>
-      </div>
-    </div>
-  );
   
   
   const handleViewDetails = (perfil) => {
@@ -155,22 +112,33 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
     })
     .then((response) => response.text())
     .then((data) => {
-      if (data === "RELOG") {
-        tokenService.removeUser()
-        navigate("/login");
-      } else if (data === "HOME") {
-        console.log(data)
-        navigate("/home");
-      } else {
-        let json = JSON.parse(data);
-        if (json.message) {
-          let mensaje = "Status Code: " + json.statusCode + " -> " + json.message;
-          setMessage(mensaje);
-          setVisible(true);
-        } else {
-          navigate("/home");
-        }
-      }
+      setMostrarDatosPerfil(false)
+    })
+    .catch((error) => alert(error.message));
+  }
+
+  function handleSubmitNuevo(event) {
+    event.preventDefault();
+    const updatedPerfil = {
+        ...perfilNuevo,
+        
+        
+    };
+    
+    fetch("/api/kubico/perfil/crearOtro" , {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedPerfil),
+    })
+    .then((response) => response.text())
+    .then((data) => {
+      setAñadirUsuarioMostrar(false)
+      setBorrarTrigger((prev)=> prev +1)
+      setPerfilNuevo({})
     })
     .catch((error) => alert(error.message));
   }
@@ -182,6 +150,13 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
     setPerfil({ ...perfil, [name]: value });
   }
 
+  function handleChangeNuevo(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    setPerfilNuevo({...perfilNuevo, [name]:value});
+  }
+
 
 
 
@@ -189,7 +164,10 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
     <div style={{ padding: '20px' }}>
       <h3>
         Lista de Usuarios{' '}
-        <Button color="success" onClick={() => setAñadirUsuarioMostrar(true)}>
+        <Button color="success" onClick={() => {
+          setAñadirUsuarioMostrar(true)
+          setPerfilNuevo({...perfilNuevo, authority: "Cliente"})
+          }}>
           Añadir Usuario
         </Button>
       </h3>
@@ -270,6 +248,17 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
                 />
               </div>
               <div className="custom-form-input">
+                <Label for="lastName" className="custom-form-input-label">Apellido</Label>
+                <Input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  value={perfil.lastName || ""}
+                  onChange={handleChange}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
                 <Label for="telefono" className="custom-form-input-label">Telefono</Label>
                 <Input
                   type="text"
@@ -302,17 +291,7 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
                   className="custom-input"
                 />
               </div>
-              <div className="custom-form-input">
-                <Label for="lastName" className="custom-form-input-label">Apellido</Label>
-                <Input
-                  type="text"
-                  name="lastName"
-                  id="lastName"
-                  value={perfil.lastName || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
+              
             
               
               <div className="custom-button-row">
@@ -326,7 +305,129 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
           
           </>)}
 
-          {añadirUsuarioMostrar && !mostrarDatosPerfil &&<AñadirUsuarioForm setAñadirUsuarioMostrar={setAñadirUsuarioMostrar}/>}
+          {añadirUsuarioMostrar && !mostrarDatosPerfil &&<>
+
+            {modal}
+            <div className="auth-page-container">
+      <h1>Añadir usuario</h1>
+      <div className="auth-form-container">
+      <Form onSubmit={handleSubmitNuevo}>
+              {/* Datos del Usuario */}
+              <div className="custom-form-input">
+                <Label for="username" className="custom-form-input-label">Nombre de usuario</Label>
+                <Input
+                  type="text"
+                  name="username"
+                  id="username"
+                  value={perfilNuevo.username || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="password" className="custom-form-input-label">Contraseña</Label>
+                <Input
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={perfilNuevo.password || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="authority" className="custom-form-input-label">Rol</Label>
+                <Input
+                  type="text"
+                  name="authority"
+                  id="authority"
+                  value={perfilNuevo.authority || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+
+            
+              <div className="custom-form-input">
+                <Label for="firstName" className="custom-form-input-label">Nombre</Label>
+                <Input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  value={perfilNuevo.firstName || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="second_name" className="custom-form-input-label">Segundo nombre</Label>
+                <Input
+                  type="text"
+                  name="second_name"
+                  id="second_name"
+                  value={perfilNuevo.second_name || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="lastName" className="custom-form-input-label">Apellido</Label>
+                <Input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  value={perfilNuevo.lastName || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="telefono" className="custom-form-input-label">Telefono</Label>
+                <Input
+                  type="phone"
+                  name="telefono"
+                  id="telefono"
+                  value={perfilNuevo.telefono || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="direccion" className="custom-form-input-label">Direccion</Label>
+                <Input
+                  type="text"
+                  name="direccion"
+                  id="direccion"
+                  value={perfilNuevo.direccion || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="sexo" className="custom-form-input-label">Sexo</Label>
+                <Input
+                  type="text"
+                  name="sexo"
+                  id="sexo"
+                  value={perfilNuevo.sexo || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              
+            
+              
+              <div className="custom-button-row">
+                <button className="auth-button">Guardar</button>
+                <Button onClick={() => {
+                    setPerfilNuevo(null)
+                    setAñadirUsuarioMostrar(false)
+                }}>Volver</Button>
+              </div>
+            </Form>
+      </div>
+    </div>
+          </>}
     </div>
   );
 }
