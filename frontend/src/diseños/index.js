@@ -291,7 +291,7 @@ export default function Profile() {
             {disenioDetalles ? (
                 <img src={disenioDetalles.foto}
                 alt="Foto del diseño"
-                style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+                style={{ width: `${disenioDetalles.ancho}px`, height: `${disenioDetalles.alto}px`, borderRadius: '50%' }}
                 onError={(e) => (e.target.style.display = 'none')}/>
               ) : (
                 <p>Cargando...</p>
