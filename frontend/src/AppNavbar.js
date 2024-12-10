@@ -51,6 +51,7 @@ function AppNavbar() {
                         <DropdownMenu end>
                             <DropdownItem tag={Link} to="/administrarUsuarios">Administrar usuarios</DropdownItem>
                             <DropdownItem tag={Link} to="/pedidosAdmin">Lista de pedidos</DropdownItem>
+                            <DropdownItem tag={Link} to="/profile">Editar mi perfil</DropdownItem>
                             <DropdownItem style={{ color: 'red' }} tag={Link} to="/logout">Cerrar Sesión</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
@@ -68,6 +69,7 @@ function AppNavbar() {
                         <DropdownMenu end>
                             <DropdownItem tag={Link} to="/pedidosCliente">Mis Pedidos</DropdownItem>
                             <DropdownItem tag={Link} to="/diseños">Mis diseños</DropdownItem>
+                            <DropdownItem tag={Link} to="/profile">Editar mi perfil</DropdownItem>
                             <DropdownItem style={{ color: 'red' }} tag={Link} to="/logout">Cerrar Sesión</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
@@ -85,6 +87,7 @@ function AppNavbar() {
                         <DropdownMenu end>
                             <DropdownItem tag={Link} to="/chats">Chats</DropdownItem>
                             <DropdownItem tag={Link} to="/pedidosInteriorista">Pedidos por revisar</DropdownItem>
+                            <DropdownItem tag={Link} to="/profile">Editar mi perfil</DropdownItem>
                             <DropdownItem style={{ color: 'red' }} tag={Link} to="/logout">Cerrar Sesión</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
@@ -101,6 +104,7 @@ function AppNavbar() {
                         </DropdownToggle>
                         <DropdownMenu end>
                             <DropdownItem tag={Link} to="/pedidosMontador">Pedidos por montar</DropdownItem>
+                            <DropdownItem tag={Link} to="/profile">Editar mi perfil</DropdownItem>
                             <DropdownItem style={{ color: 'red' }} tag={Link} to="/logout">Cerrar Sesión</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
