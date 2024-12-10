@@ -4,13 +4,15 @@ import useFetchState from '../util/useFetchState';
 import tokenService from "../services/token.service";
 import getErrorModal from "../util/getErrorModal";
 import { useNavigate } from "react-router-dom";
-import FormGenerator from "./../components/formGenerator/formGenerator";
 
 
 const jwt = tokenService.getLocalAccessToken();
 export default function ListaUsuarios() {
   const [visible, setVisible]= useState(false)
   const [message, setMessage] = useState(null);
+
+  const roles = ["Montador", "Cliente", "Interiorista"];
+  const sexos = ["Hombre", "Mujer", "Otro"];
 
   const [perfiles, setPerfiles] = useFetchState(
     [], "/api/kubico/usuarios", jwt, setMessage, setVisible
@@ -97,6 +99,8 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
     event.preventDefault();
     const updatedPerfil = {
         ...perfil,
+        sexo: perfil.sexo?.toUpperCase(),
+        rol: perfil.rol?.toUpperCase() 
         
         
     };
@@ -121,6 +125,9 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
     event.preventDefault();
     const updatedPerfil = {
         ...perfilNuevo,
+        sexo: perfilNuevo.sexo?.toUpperCase(),
+        rol: perfilNuevo.rol?.toUpperCase() 
+        
         
         
     };
@@ -213,16 +220,24 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
               {/* Datos del Usuario */}
               
               {perfil.authority !== "CLIENTE" && <div className="custom-form-input">
-                <Label for="authority" className="custom-form-input-label">Rol</Label>
-                <Input
-                  type="text"
-                  name="authority"
-                  id="authority"
-                  value={perfil.authority || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>}
+  <Label for="authority" className="custom-form-input-label">Rol</Label>
+  <Input
+    type="select"
+    name="authority"
+    id="authority"
+    value={perfil.authority || ""}
+    onChange={handleChange}
+    className="custom-input"
+  >
+    <option value="" disabled>Selecciona un rol</option>
+    {roles.map((rol) => (
+      <option key={rol} value={rol.toUpperCase()}>
+        {rol}
+      </option>
+    ))}
+  </Input>
+</div>
+}
 
             
               <div className="custom-form-input">
@@ -281,16 +296,23 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
                 />
               </div>
               <div className="custom-form-input">
-                <Label for="sexo" className="custom-form-input-label">Sexo</Label>
-                <Input
-                  type="text"
-                  name="sexo"
-                  id="sexo"
-                  value={perfil.sexo || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
+  <Label for="sexo" className="custom-form-input-label">Sexo</Label>
+  <Input
+    type="select"
+    name="sexo"
+    id="sexo"
+    value={perfil.sexo || ""}
+    onChange={handleChange}
+    className="custom-input"
+  >
+    <option value="" disabled>Selecciona una opción</option>
+    {sexos.map((sexo) => (
+      <option key={sexo} value={sexo.toUpperCase()}>
+        {sexo}
+      </option>
+    ))}
+  </Input>
+</div>
               
             
               
@@ -336,16 +358,24 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
                 />
               </div>
               <div className="custom-form-input">
-                <Label for="authority" className="custom-form-input-label">Rol</Label>
-                <Input
-                  type="text"
-                  name="authority"
-                  id="authority"
-                  value={perfilNuevo.authority || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                />
-              </div>
+  <Label for="authority" className="custom-form-input-label">Rol</Label>
+  <Input
+    type="select"
+    name="authority"
+    id="authority"
+    value={perfilNuevo.authority || ""}
+    onChange={handleChangeNuevo}
+    className="custom-input"
+  >
+    <option value="" disabled>Selecciona un rol</option>
+    {roles.map((rol) => (
+      <option key={rol} value={rol.toUpperCase()}>
+        {rol}
+      </option>
+    ))}
+  </Input>
+</div>
+
 
             
               <div className="custom-form-input">
@@ -404,16 +434,23 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
                 />
               </div>
               <div className="custom-form-input">
-                <Label for="sexo" className="custom-form-input-label">Sexo</Label>
-                <Input
-                  type="text"
-                  name="sexo"
-                  id="sexo"
-                  value={perfilNuevo.sexo || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                />
-              </div>
+  <Label for="sexo" className="custom-form-input-label">Sexo</Label>
+  <Input
+    type="select"
+    name="sexo"
+    id="sexo"
+    value={perfilNuevo.sexo || ""}
+    onChange={handleChangeNuevo}
+    className="custom-input"
+  >
+    <option value="" disabled>Selecciona una opción</option>
+    {sexos.map((sexo) => (
+      <option key={sexo} value={sexo.toUpperCase()}>
+        {sexo}
+      </option>
+    ))}
+  </Input>
+</div>
               
             
               

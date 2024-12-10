@@ -224,7 +224,7 @@ public class ControllerDeKubico {
         // Obtiene el usuario actual
         User currentUser = userService.findUser(username);
     
-
+        
     
     
         // Determinar el tipo de usuario asociado
