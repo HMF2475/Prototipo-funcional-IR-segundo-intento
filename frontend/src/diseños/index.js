@@ -766,7 +766,7 @@ export default function Profile() {
           <img
             src={disenioDetalles.foto}
             alt="Foto del diseño"
-            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '400px', maxWidth: '400px', objectFit: "fill", transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
+            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '800px', maxWidth: '800px', objectFit: "fill", transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
             onError={(e) => (e.target.style.display = 'none')}
           />
         ) : (
@@ -989,7 +989,7 @@ export default function Profile() {
           <img
             src={fotoGenerica}
             alt="Foto del diseño"
-            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '400px', maxWidth: '400px', objectFit: 'fill', transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
+            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '800px', maxWidth: '800px', objectFit: 'fill', transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
             onError={(e) => (e.target.style.display = 'none')}
           />
         ) : (
