@@ -4,10 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.samples.kubico.administrador.Admin;
 import org.springframework.samples.kubico.administrador.AdminRepository;
 import org.springframework.samples.kubico.cliente.Cliente;
@@ -15,6 +14,7 @@ import org.springframework.samples.kubico.cliente.ClienteRepository;
 import org.springframework.samples.kubico.diseño.Disenio;
 import org.springframework.samples.kubico.diseño.DisenioRepository;
 import org.springframework.samples.kubico.diseño.Modulo;
+import org.springframework.samples.kubico.diseño.ModuloRepository;
 import org.springframework.samples.kubico.interiorista.Interiorista;
 import org.springframework.samples.kubico.interiorista.InterioristaRepository;
 import org.springframework.samples.kubico.montador.Montador;
@@ -25,8 +25,7 @@ import org.springframework.samples.kubico.pedido.PedidoRepository;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 @Service
 public class ServiceDeKubico {
@@ -37,19 +36,22 @@ public class ServiceDeKubico {
     private final MontadorRepository montadorRepository;
     private final PedidoRepository pedidoRepository;
     private final DisenioRepository disenioRepository;
+    private final ModuloRepository moduloRepository;
 
     @Autowired
     public ServiceDeKubico(
         AdminRepository adminRepository,
         ClienteRepository clienteRepository,
         InterioristaRepository interioristaRepository,
-        MontadorRepository montadorRepository, PedidoRepository pedidoRepository, DisenioRepository disenioRepository) {
+        MontadorRepository montadorRepository, PedidoRepository pedidoRepository, 
+        DisenioRepository disenioRepository,ModuloRepository moduloRepository) {
             this.adminRepository = adminRepository;
             this.clienteRepository = clienteRepository;
             this.interioristaRepository = interioristaRepository;
             this.montadorRepository = montadorRepository;
             this.disenioRepository = disenioRepository;
             this.pedidoRepository = pedidoRepository;
+            this.moduloRepository = moduloRepository;
     }
 
     @Transactional(readOnly = true)
@@ -132,7 +134,7 @@ public class ServiceDeKubico {
             usuarios.add(perfil);
         });
 
-        // Mapear interioristas a Perfil
+
         interioristaRepository.findAll().forEach(interiorista -> {
             Perfil perfil = new Perfil();
             perfil.setUsername(interiorista.getUser().getUsername());
@@ -147,7 +149,7 @@ public class ServiceDeKubico {
             usuarios.add(perfil);
         });
 
-        // Mapear montadores a Perfil
+
         montadorRepository.findAll().forEach(montador -> {
             Perfil perfil = new Perfil();
             perfil.setUsername(montador.getUser().getUsername());
@@ -177,13 +179,13 @@ public class ServiceDeKubico {
         return disenioRepository.save(disenio);
     }
 
-    // Guardar Interiorista
+
     @Transactional
     public Interiorista saveInteriorista(Interiorista interiorista) {
         return interioristaRepository.save(interiorista);
     }
 
-    // Guardar Montador
+
     @Transactional
     public Montador saveMontador(Montador montador) {
         return montadorRepository.save(montador);
@@ -195,19 +197,19 @@ public class ServiceDeKubico {
     }
     @Transactional(readOnly = true)
     public Object findByUserId(Integer userId) {
-        // Buscar en clientes
+
         if (clienteRepository.findByUser(userId).isPresent()) {
             return clienteRepository.findByUser(userId)
                 .orElseThrow(() -> new NotFoundException("No se encontró un cliente con ese ID"));
         }
 
-        // Buscar en interioristas
+
         if (interioristaRepository.findByUser(userId).isPresent()) {
             return interioristaRepository.findByUser(userId)
                 .orElseThrow(() -> new NotFoundException("No se encontró un interiorista con ese ID"));
         }
 
-        // Buscar en montadores
+
         if (montadorRepository.findByUser(userId).isPresent()) {
             return montadorRepository.findByUser(userId)
                 .orElseThrow(() -> new NotFoundException("No se encontró un montador con ese ID"));
@@ -217,7 +219,7 @@ public class ServiceDeKubico {
                 .orElseThrow(() -> new NotFoundException("No se encontró un montador con ese ID"));
         }
 
-        // Si no se encuentra en ninguna tabla
+
         throw new NotFoundException("No se encontró un usuario con ese ID");
     }
 
@@ -240,7 +242,7 @@ public class ServiceDeKubico {
 
     @Transactional(readOnly = true)
     public List<Pedido> findPedidosByUserId(Integer userId) {
-        // Determina el tipo de usuario
+
         String userType = getUserTypeById(userId);
 
         switch (userType) {
@@ -375,10 +377,34 @@ public class ServiceDeKubico {
             disenio.setPrecioEstimado(precioAntes - 12.99);
         }
         
-        
-
         return disenioRepository.save(disenio);
     }
+
+    @Transactional
+    public List<Modulo> actualizarModulos (List<Modulo> modulosNuevos, Integer disenioId){
+        Disenio disenio = disenioRepository.findById(disenioId)
+        .orElseThrow(() -> new NotFoundException("No se encontró el diseño con ID " + disenioId));
+
+        List<Modulo> modulosViejos = disenioRepository.findAllModulosByDisenioId(disenioId);
+        
+        for (Modulo moduloViejo: modulosViejos){
+            moduloRepository.delete(moduloViejo);
+        }
+
+        for(Modulo moduloNuevo: modulosNuevos){
+            moduloNuevo.setDisenio(disenio);
+            moduloRepository.save(moduloNuevo);
+        }
+        return modulosNuevos;
+
+    }
+    public List<Modulo> findAllModulosByDisenioId(Integer disenioId){
+        Disenio disenio = disenioRepository.findById(disenioId)
+        .orElseThrow(() -> new NotFoundException("No se encontró el diseño con ID " + disenioId));
+
+        return disenioRepository.findAllModulosByDisenioId(disenio.getId());
+    }
+
 
     @Transactional
     public Disenio guardarDisenioNuevo(Disenio disenio){

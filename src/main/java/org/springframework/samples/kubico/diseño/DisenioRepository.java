@@ -12,6 +12,6 @@ public interface DisenioRepository extends CrudRepository<Disenio, Integer> {
 
     List<Disenio> findByClienteId(Integer clienteId);
 
-    @Query("SELECT m FROM Modulo m WHERE m.disenio LIKE ?1")
+    @Query("SELECT m FROM Modulo m WHERE m.disenio.id LIKE ?1")
     List<Modulo> findAllModulosByDisenioId(Integer disenio_id);
 }

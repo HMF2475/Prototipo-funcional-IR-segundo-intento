@@ -10,16 +10,17 @@ import org.springframework.samples.kubico.administrador.Admin;
 import org.springframework.samples.kubico.auth.payload.response.MessageResponse;
 import org.springframework.samples.kubico.cliente.Cliente;
 import org.springframework.samples.kubico.diseño.Disenio;
+import org.springframework.samples.kubico.diseño.Modulo;
 import org.springframework.samples.kubico.exceptions.AccessDeniedException;
 import org.springframework.samples.kubico.interiorista.Interiorista;
 import org.springframework.samples.kubico.montador.Montador;
 import org.springframework.samples.kubico.pedido.Estado;
 import org.springframework.samples.kubico.pedido.Pedido;
-import org.springframework.samples.kubico.user.Authorities;
+
 import org.springframework.samples.kubico.user.AuthoritiesService;
 import org.springframework.samples.kubico.user.User;
 import org.springframework.samples.kubico.user.UserService;
-import org.springframework.samples.kubico.util.RestPreconditions;
+
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,49 +48,48 @@ public class ControllerDeKubico {
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
-    // Obtener todos los clientes
+ 
     @GetMapping("/clientes")
     public ResponseEntity<List<Cliente>> getAllClientes() {
         List<Cliente> clientes = serviceDeKubico.findAllClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
-    // Obtener interiorista por userId
     @GetMapping("/interioristas/{userId}")
     public ResponseEntity<Interiorista> getInterioristaByUserId(@PathVariable Integer userId) {
         Interiorista interiorista = serviceDeKubico.findInterioristaByUserId(userId);
         return new ResponseEntity<>(interiorista, HttpStatus.OK);
     }
 
-    // Obtener todos los interioristas
+
     @GetMapping("/interioristas")
     public ResponseEntity<List<Interiorista>> getAllInterioristas() {
         List<Interiorista> interioristas = serviceDeKubico.findAllInterioristas();
         return new ResponseEntity<>(interioristas, HttpStatus.OK);
     }
 
-    // Obtener montador por userId
+
     @GetMapping("/montadores/{userId}")
     public ResponseEntity<Montador> getMontadorByUserId(@PathVariable Integer userId) {
         Montador montador = serviceDeKubico.findMontadorByUserId(userId);
         return new ResponseEntity<>(montador, HttpStatus.OK);
     }
 
-    // Obtener todos los montadores
+
     @GetMapping("/montadores")
     public ResponseEntity<List<Montador>> getAllMontadores() {
         List<Montador> montadores = serviceDeKubico.findAllMontadores();
         return new ResponseEntity<>(montadores, HttpStatus.OK);
     }
 
-    // Obtener todos los trabajadores (interioristas y montadores)
+
     @GetMapping("/trabajadores")
     public ResponseEntity<List<Object>> getAllTrabajadores() {
         List<Object> trabajadores = serviceDeKubico.findAllTrabajadores();
         return new ResponseEntity<>(trabajadores, HttpStatus.OK);
     }
 
-    // Obtener todos los usuarios (clientes, interioristas, montadores)
+
     @GetMapping("/usuarios")
     public ResponseEntity<List<Perfil>> getAllUsuarios() {
         List<Perfil> usuarios = serviceDeKubico.findAllUsuarios();
@@ -98,15 +98,14 @@ public class ControllerDeKubico {
 
     @GetMapping("/perfil")
     public ResponseEntity<Perfil> getProfile(Principal principal) {
-        // Obtiene el usuario actual
+  
         User user = userService.findCurrentUser();
         Object usuario = serviceDeKubico.findByUserId(user.getId());
         String tipoUsuario = serviceDeKubico.getUserTypeById(user.getId());
-    
-        // Crear objeto perfil
+
         Perfil perfil = new Perfil();
     
-        // Rellena los datos del perfil según el tipo de usuario
+
         switch (tipoUsuario) {
             case "Cliente":
                 Cliente cliente = (Cliente) usuario;
@@ -152,12 +151,11 @@ public class ControllerDeKubico {
                 throw new NotFoundException("No se pudo determinar el tipo del usuario");
         }
     
-        // Campos comunes
+       
         perfil.setAuthority(user.getAuthority().getAuthority());
         
         perfil.setUsername(user.getUsername());
     
-        // Retorna la respuesta
         return ResponseEntity.ok(perfil);
     }
     
@@ -165,17 +163,17 @@ public class ControllerDeKubico {
     
     @PutMapping("/perfil/edit")
     public ResponseEntity<?> updateProfile(@RequestBody Perfil perfil, Principal principal) {
-        // Obtiene el usuario actual
+
         User currentUser = userService.findCurrentUser();
     
-        // Actualiza los datos del usuario
+
         User userToUpdate = new User();
         userToUpdate.setPassword(perfil.getPassword());
         userToUpdate.setUsername(perfil.getUsername());
         Boolean mismoUsername = userToUpdate.getUsername().equals(currentUser.getUsername());
         Boolean mismaContraseña = (userToUpdate.getPassword() == null || userToUpdate.getPassword().isEmpty());
     
-        // Determinar el tipo de usuario asociado
+
         Object usuario = serviceDeKubico.findByUserId(currentUser.getId());
         String tipoUsuario = serviceDeKubico.getUserTypeById(currentUser.getId());
     
@@ -201,33 +199,29 @@ public class ControllerDeKubico {
             case "Admin":
                 Admin admin = (Admin) usuario;
                 updateAdminData(admin, perfil);
-                serviceDeKubico.saveAdmin(admin); // Crea un método saveAdmin si no existe.
+                serviceDeKubico.saveAdmin(admin); 
                 break;
     
             default:
                 throw new NotFoundException("No se pudo determinar el tipo de usuario para actualizar el perfil.");
         }
-    
-        // Actualizar la información del usuario
+
         userService.updateCurrentUser(userToUpdate);
     
-        // Verificar cambios de username o contraseña y responder en consecuencia
+
         if (!mismoUsername || !mismaContraseña) {
-            return ResponseEntity.ok(relog); // Relog significa que el usuario debe volver a iniciar sesión
+            return ResponseEntity.ok(relog); 
         } else {
-            return ResponseEntity.ok(home); // Home significa que el perfil se actualizó sin necesidad de relog
+            return ResponseEntity.ok(home); 
         }
     }
 
     @PutMapping("/perfil/editOtro")
     public ResponseEntity<?> updateProfile(@RequestBody Perfil perfil, @RequestParam ("username") String username) {
-        // Obtiene el usuario actual
+
         User currentUser = userService.findUser(username);
     
         
-    
-    
-        // Determinar el tipo de usuario asociado
         Object usuario = serviceDeKubico.findByUserId(currentUser.getId());
         String tipoUsuario = serviceDeKubico.getUserTypeById(currentUser.getId());
     
@@ -257,25 +251,21 @@ public class ControllerDeKubico {
                 Admin admin = (Admin) usuario;
                 updateAdminData(admin, perfil);
   
-                serviceDeKubico.saveAdmin(admin); // Crea un método saveAdmin si no existe.
+                serviceDeKubico.saveAdmin(admin); 
                 break;
     
             default:
                 throw new NotFoundException("No se pudo determinar el tipo de usuario para actualizar el perfil.");
         }
-    
-        // Actualizar la información del usuario
-        
-    
-        // Verificar cambios de username o contraseña y responder en consecuencia
+
        
-        return ResponseEntity.ok(relog); // Relog significa que el usuario debe volver a iniciar sesión
+        return ResponseEntity.ok("Hecho"); 
         
     }
 
     @PostMapping("/perfil/crearOtro")
     public ResponseEntity<?> crearProfile(@RequestBody Perfil perfil) {
-        // Obtiene el usuario actual
+
         if(userService.existsUser(perfil.getUsername())) throw new IllegalArgumentException("Ya existe");
     
         
@@ -287,8 +277,6 @@ public class ControllerDeKubico {
         userService.saveUser(userToUpdate);
         
     
-        // Determinar el tipo de usuario asociado
-
     
         switch (perfil.getAuthority().toLowerCase()) {
             case "cliente":
@@ -316,14 +304,14 @@ public class ControllerDeKubico {
                 Admin admin = new Admin();
                 updateAdminData(admin, perfil);
                 admin.setUser(userToUpdate);
-                serviceDeKubico.saveAdmin(admin); // Crea un método saveAdmin si no existe.
+                serviceDeKubico.saveAdmin(admin);
                 break;
     
             default:
                 throw new NotFoundException("No se pudo determinar el tipo de usuario para actualizar el perfil.");
         }
        
-        return ResponseEntity.ok(relog); // Relog significa que el usuario debe volver a iniciar sesión
+        return ResponseEntity.ok("Hecho"); 
         
     }
 
@@ -395,6 +383,12 @@ public class ControllerDeKubico {
         Disenio disenio = serviceDeKubico.findDisenioByDisenioId(disenioId);
         return ResponseEntity.ok(disenio);
     }
+    
+    @GetMapping("/disenios/{disenioId}/modulos")
+    public ResponseEntity<List<Modulo>> getModulosByDisenioId(@PathVariable Integer disenioId) {
+        List<Modulo> modulos = serviceDeKubico.findAllModulosByDisenioId(disenioId);
+        return ResponseEntity.ok(modulos);
+    }
 
 
     @PutMapping("/disenios/{disenioId}")
@@ -402,6 +396,13 @@ public class ControllerDeKubico {
                
             Disenio disenio = serviceDeKubico.actualizarDisenio(disenioNuevo);
             return ResponseEntity.ok(disenio);       
+            
+    }
+    @PutMapping("/disenios/{disenioId}/modulos")
+    public ResponseEntity<List<Modulo>> actualizarModulosByDisenioId(@PathVariable Integer disenioId, @RequestBody List<Modulo> modulos) {
+               
+            List<Modulo> modulosActualizados = serviceDeKubico.actualizarModulos(modulos, disenioId);
+            return ResponseEntity.ok(modulosActualizados);       
             
     }
     

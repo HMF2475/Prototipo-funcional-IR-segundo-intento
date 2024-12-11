@@ -45,10 +45,10 @@ INSERT INTO disenio (id, tipo, tipo_puerta, observaciones, num_puertas, alto, an
 INSERT INTO disenio (id, tipo, tipo_puerta, observaciones, num_puertas, alto, ancho, fondo, nombre, cliente_id,fecha_estimada,precio_estimado, foto) VALUES (6,'Armario', 'Abatible', 'Con detalles artesanales', 2, 2.0, 1.2, 0.5, 'Diseno Rustico 1',1,'2024-12-23',567.0,'http://localhost:8080/resources/images/foto_prueba.jpg');
 
 
-INSERT INTO modulos(id, ancho, alto, fondo, iluminacion, pantalonero, zapatero, tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES 
+INSERT INTO modulos(id, ancho, alto, fondo, iluminacion, pantalonero, zapatero, tipo_material, num_cajoneras,altura_balda, disenio_id) VALUES 
                    (1,   2.3,   3.4,   2.2,  'costado',       'no',     'no',      'blanco',       2,           3,           1);
-INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES (2,2.5, 3.5, 2.1, 'ninguna', 'no','no','negro', 2, 2, 2);
-INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,num_baldas, disenio_id) VALUES (3,2.6, 3.6, 2.6, 'ninguna', 'no','no','turquesa', 2,2, 3);
+INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,altura_balda, disenio_id) VALUES (2,2.5, 3.5, 2.1, 'ninguna', 'no','no','negro', 2, 2, 2);
+INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,pantalonero, zapatero,tipo_material, num_cajoneras,altura_balda, disenio_id) VALUES (3,2.6, 3.6, 2.6, 'ninguna', 'no','no','turquesa', 2,2, 3);
  
 
 INSERT INTO pedido (id, referencia, precio, cliente_id, interiorista_id, disenio_id, montador_id, fecha_estimada, fecha_pedido,  estado, pagado) VALUES 
