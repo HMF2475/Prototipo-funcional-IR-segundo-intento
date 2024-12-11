@@ -546,9 +546,9 @@ export default function Profile() {
 
         {/* Tabla de disenios */}
         {!mostrarDatosDisenio && !crearNuevoDisenio && (
-  <div style={{ marginTop: '20px', backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '5px', width: '600px', height: '800px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+  <div style={{ marginTop: '20px', backgroundColor: '#4d5650', padding: '20px', borderRadius: '5px', width: '600px', height: '800px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: '20px' }}>
-      <h3 style={{ margin: 0, color: '#343a40' }}>Lista de Diseños</h3>
+      <h3 style={{ margin: 0, color: '#ffffff' }}>Lista de Diseños</h3>
       <Button color="success" onClick={() => { setCrearNuevoDisenio(true); setListaModulos([]); setNuevoModulo({});
     setImageHeight(200)
     setImageWidth(200)
