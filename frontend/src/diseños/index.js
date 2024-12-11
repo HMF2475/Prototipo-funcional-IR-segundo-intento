@@ -526,399 +526,450 @@ export default function Profile() {
         </div>
 
         {/* Tabla de disenios */}
-        {!mostrarDatosDisenio && !crearNuevoDisenio&& (
-          <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '600px', height: '800px' }}>
-            <div style={{display:"flex", flexDirection:"row"}}>
-            <h3>Lista de diseños</h3>
-            <Button color="primary" onClick={() => {setCrearNuevoDisenio(true)
-              setListaModulos([])
-              setNuevoModulo({})
-            }}>
-                          Crear nuevo diseño
-                        </Button>
-            </div>
-            
-            {disenios.length > 0 ? (
-              <Table responsive>
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Tipo</th>
-                    <th>Fecha Estimada</th>
-                    <th>Precio Estimado</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {disenios.map((disenio) => (
-                    <tr key={disenio.id}>
-                      <td>{disenio.nombre}</td>
-                      <td>{disenio.tipo}</td>
-                      <td>{new Date(disenio.fechaEstimada).toLocaleDateString()}</td>
-                      <td>{disenio.precioEstimado}</td>
-                      <td>
-                        <Button color="primary" onClick={() => verDetallesDisenio(disenio.id)}>
-                          Ver Detalles
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            ) : (
-              <p>No hay disenios disponibles.</p>
-            )}
-          </div>
-        )}
+        {!mostrarDatosDisenio && !crearNuevoDisenio && (
+  <div style={{ marginTop: '20px', backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '5px', width: '600px', height: '800px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: '20px' }}>
+      <h3 style={{ margin: 0, color: '#343a40' }}>Lista de Diseños</h3>
+      <Button color="success" onClick={() => { setCrearNuevoDisenio(true); setListaModulos([]); setNuevoModulo({}); }}>
+        Crear Nuevo Diseño
+      </Button>
+    </div>
+
+    {disenios.length > 0 ? (
+      <Table responsive bordered hover style={{ backgroundColor: 'white', borderRadius: '5px', overflow: 'hidden', border: '2px solid #28a745' }}>
+        <thead style={{ backgroundColor: '#28a745', color: 'white' }}>
+          <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Fecha Estimada</th>
+            <th>Precio Estimado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {disenios.map((disenio, index) => (
+            <tr key={disenio.id} style={{ textAlign: 'center', backgroundColor: index === 0 ? '#d4edda' : 'white', borderBottom: '1px solid #28a745' }}>
+              <td>{disenio.nombre}</td>
+              <td>{disenio.tipo}</td>
+              <td>{new Date(disenio.fechaEstimada).toLocaleDateString()}</td>
+              <td>{disenio.precioEstimado}</td>
+              <td>
+                <Button color="success" onClick={() => verDetallesDisenio(disenio.id)}>
+                  Ver Detalles
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    ) : (
+      <p style={{ textAlign: 'center', color: '#6c757d' }}>No hay diseños disponibles.</p>
+    )}
+  </div>
+)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         {/* Modal de detalles del disenio */}
-        {mostrarDatosDisenio && disenioDetalles && !crearNuevoDisenio && (
-          <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width:'600px', height:'800px' }}>
-            <h5>Nombre: {disenioDetalles.nombre}</h5>
-            <div style={{ display:"flex",flexDirection: "row"}}>
-            
-            <div>
-                <h5>Lista de módulos</h5>
-                <Button color="info" onClick={toggleModulosDropdown}>
-                  {modulosDropdownOpen ? "Ocultar módulos" : "Mostrar módulos"}
-                </Button>
-                <Button color="success" style={{ marginLeft: "10px" }} onClick={()=> setMostrarNuevoModulo(true)}>
-                  Añadir módulo
-                </Button>
-                <Collapse isOpen={modulosDropdownOpen}>
-                  {listaModulos.length > 0 ? (
-                    listaModulos.map((modulo, index) => (
-                      <div key={index} style={{ marginBottom: "10px" }}>
-                        <div style={{display:"flex", flexDirection:"row"}}>
-                        <p>Módulo nº {index + 1}      </p>
-                        <Button color="danger" style={{ marginRight: "10px", marginLeft:"10px" }} onClick={()=>deleteModulo(index)}>
-                          Borrar módulo
-                        </Button>
-                        </div>
-              {modulo.alto && <div className="custom-form-input">  
-              <Label for="alto" className="custom-form-input-label">Alto del modulo</Label>
-              <Input
-                type="text"
-                name="alto"
-                id="alto"
-                value={modulo.alto || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            {modulo.ancho &&<div className="custom-form-input">  
-              <Label for="ancho" className="custom-form-input-label">Ancho del modulo</Label>
-              <Input
-                type="text"
-                name="ancho"
-                id="ancho"
-                value={modulo.ancho || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            {modulo.fondo && <div className="custom-form-input">  
-              <Label for="fondo" className="custom-form-input-label">Fondo del modulo</Label>
-              <Input
-                type="text"
-                name="fondo"
-                id="fondo"
-                value={modulo.fondo || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            {modulo.iluminacion && <div className="custom-form-input">  
-              <Label for="iluminacion" className="custom-form-input-label">Tipo de iluminacion</Label>
-              <Input
-                type="text"
-                name="iluminacion"
-                id="iluminacion"
-                value={modulo.iluminacion || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            {modulo.pantalonero && <div className="custom-form-input">  
-              <Label for="pantalonero" className="custom-form-input-label">Tipo de pantalonero </Label>
-              <Input
-                type="text"
-                name="pantalonero"
-                id="pantalonero"
-                value={modulo.pantalonero || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            {modulo.zapatero && <div className="custom-form-input">  
-              <Label for="zapatero" className="custom-form-input-label">Tipo de zapatero </Label>
-              <Input
-                type="text"
-                name="zapatero"
-                id="zapatero"
-                value={modulo.zapatero || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            {modulo.tipoMaterial && <div className="custom-form-input">  
-              <Label for="tipoMaterial" className="custom-form-input-label">Tipo de material</Label>
-              <Input
-                type="text"
-                name="tipoMaterial"
-                id="tipoMaterial"
-                value={modulo.tipoMaterial || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            {modulo.numCajoneras && <div className="custom-form-input">  
-              <Label for="numCajoneras" className="custom-form-input-label">Numero de cajoneras</Label>
-              <Input
-                type="text"
-                name="numCajoneras"
-                id="numCajoneras"
-                value={modulo.numCajoneras || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            {modulo.alturaBalda && <div className="custom-form-input">  
-              <Label for="alturaBalda" className="custom-form-input-label">Altura de la balda</Label>
-              <Input
-                type="text"
-                name="alturaBalda"
-                id="alturaBalda"
-                value={modulo.alturaBalda || ""}
-                onChange={(event) => handleChangeModulo(event, index)}
-                className="custom-input"
-              />
-            </div>}
-            </div>
-          ))
-                  ) : (
-                    <p>No hay módulos en este diseño</p>
-                  )}
-                  {mostrarNuevoModulo && crearNuevoModulo()}
-                </Collapse>
-              </div>
-            <div>
-            {disenioDetalles ? (
-                <img src={disenioDetalles.foto}
-                alt="Foto del diseño"
-                style={{ width: `${imageWidth}px`, height: `${imageHeight}px`,transition: 'all 0.3s ease-in-out', marginRight:`20px`}}
-                onError={(e) => (e.target.style.display = 'none')}/>
-              ) : (
-                <p>Cargando...</p>
-              )}
-              {console.log(disenioDetalles)}
-            </div>
+{mostrarDatosDisenio && disenioDetalles && !crearNuevoDisenio && (
+  <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '5px', width: '100%', maxWidth: '1200px' }}>
+    <h5>Nombre: {disenioDetalles.nombre}</h5>
 
-            <div>
-              <p><strong>Precio Estimado:</strong> {disenioDetalles.precioEstimado}€</p>
-              <p><strong>Fecha Estimada:</strong> {new Date(disenioDetalles.fechaEstimada).toLocaleDateString()}</p>
-              <p><strong>Tipo de mueble:</strong> {disenioDetalles.tipo}</p>
-         
-            
-            
-            <Form onSubmit={handleSave}>
-              
-              <div className="custom-form-input">
-                <Label for="alto" className="custom-form-input-label">Alto</Label>
-                <Input
-                  type="text"
-                  name="alto"
-                  id="alto"
-                  value={disenioDetalles.alto || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
-             <div className="custom-form-input">
-                <Label for="ancho" className="custom-form-input-label">Ancho</Label>
-                <Input
-                  type="text"
-                  name="ancho"
-                  id="ancho"
-                  value={disenioDetalles.ancho || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {/* Sección de Módulos (Izquierda) */}
+      <div style={{ flex: 1, marginRight: '20px' }}>
+        <h5>Lista de módulos</h5>
+        <Button 
+          style={{ 
+            backgroundColor: '#a0c4e9',  // Azul más suave
+            borderColor: '#7ea9d1',        // Bordes más suaves
+            color: '#fff', 
+            borderRadius: '20px',
+            transition: 'background-color 0.3s ease'
+          }} 
+          onClick={toggleModulosDropdown}>
+          {modulosDropdownOpen ? "Ocultar módulos" : "Mostrar módulos"}
+        </Button>
+        <Button 
+          color="success" 
+          style={{ marginLeft: "10px", borderRadius: '20px' }} 
+          onClick={() => setMostrarNuevoModulo(true)}>
+          Añadir módulo
+        </Button>
+        <Collapse isOpen={modulosDropdownOpen}>
+          {listaModulos.length > 0 ? (
+            listaModulos.map((modulo, index) => (
+              <div key={index} style={{ marginBottom: "10px" }}>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <p>Módulo nº {index + 1}</p>
+                  <Button 
+                    color="danger" 
+                    style={{ marginRight: "10px", marginLeft: "10px" }} 
+                    onClick={() => deleteModulo(index)}>
+                    Borrar módulo
+                  </Button>
+                </div>
 
-            
-              <div className="custom-form-input">
-                <Label for="fondo" className="custom-form-input-label">Fondo</Label>
-                <Input
-                  type="text"
-                  name="fondo"
-                  id="fondo"
-                  value={disenioDetalles.fondo || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
+                {modulo.alto && <div className="custom-form-input">
+                  <Label for="alto" className="custom-form-input-label">Alto del modulo</Label>
+                  <Input
+                    type="text"
+                    name="alto"
+                    id="alto"
+                    value={modulo.alto || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
+                {modulo.ancho && <div className="custom-form-input">
+                  <Label for="ancho" className="custom-form-input-label">Ancho del modulo</Label>
+                  <Input
+                    type="text"
+                    name="ancho"
+                    id="ancho"
+                    value={modulo.ancho || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
+                {modulo.fondo && <div className="custom-form-input">
+                  <Label for="fondo" className="custom-form-input-label">Fondo del modulo</Label>
+                  <Input
+                    type="text"
+                    name="fondo"
+                    id="fondo"
+                    value={modulo.fondo || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
+                {modulo.iluminacion && <div className="custom-form-input">
+                  <Label for="iluminacion" className="custom-form-input-label">Tipo de iluminacion</Label>
+                  <Input
+                    type="text"
+                    name="iluminacion"
+                    id="iluminacion"
+                    value={modulo.iluminacion || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
+                {modulo.pantalonero && <div className="custom-form-input">
+                  <Label for="pantalonero" className="custom-form-input-label">Tipo de pantalonero</Label>
+                  <Input
+                    type="text"
+                    name="pantalonero"
+                    id="pantalonero"
+                    value={modulo.pantalonero || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
+                {modulo.zapatero && <div className="custom-form-input">
+                  <Label for="zapatero" className="custom-form-input-label">Tipo de zapatero</Label>
+                  <Input
+                    type="text"
+                    name="zapatero"
+                    id="zapatero"
+                    value={modulo.zapatero || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
+                {modulo.tipoMaterial && <div className="custom-form-input">
+                  <Label for="tipoMaterial" className="custom-form-input-label">Tipo de material</Label>
+                  <Input
+                    type="text"
+                    name="tipoMaterial"
+                    id="tipoMaterial"
+                    value={modulo.tipoMaterial || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
+                {modulo.numCajoneras && <div className="custom-form-input">
+                  <Label for="numCajoneras" className="custom-form-input-label">Numero de cajoneras</Label>
+                  <Input
+                    type="text"
+                    name="numCajoneras"
+                    id="numCajoneras"
+                    value={modulo.numCajoneras || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
+                {modulo.alturaBalda && <div className="custom-form-input">
+                  <Label for="alturaBalda" className="custom-form-input-label">Altura de la balda</Label>
+                  <Input
+                    type="text"
+                    name="alturaBalda"
+                    id="alturaBalda"
+                    value={modulo.alturaBalda || ""}
+                    onChange={(event) => handleChangeModulo(event, index)}
+                    className="custom-input"
+                  />
+                </div>}
               </div>
-              <div className="custom-form-input">
-                <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
-                <Input
-                  type="text"
-                  name="tipoPuerta"
-                  id="tipoPuerta"
-                  value={disenioDetalles.tipoPuerta || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
-              <div className="custom-form-input">
-                <Label for="numPuertas" className="custom-form-input-label">Numero de puertas</Label>
-                <Input
-                  type="text"
-                  name="numPuertas"
-                  id="numPuertas"
-                  value={disenioDetalles.numPuertas || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
-              
-            
-              
-              <div className="custom-button-row">
-                <button className="auth-button">Guardar cambios</button>
-              </div>
-            </Form>
-            <div>
-                <Button color="success" onClick={(event) => encargarDisenio(event)}>Encargar</Button>
-                
-                <Button color="danger" onClick={()=> handleDeleteDisenio(disenioDetalles.id)}>Borrar disenio</Button>
-              </div>
-            
+            ))
+          ) : (
+            <p>No hay módulos en este diseño</p>
+          )}
+          {mostrarNuevoModulo && crearNuevoModulo()}
+        </Collapse>
+      </div>
 
-            <button color="secondary" onClick={cerrarModal}>Cerrar</button>
-            </div>
-            </div>
-            
-            
-          
-            
-              
-          </div>
+      {/* Sección de Foto (Centro) */}
+      <div style={{ flex: 1, textAlign: 'center', marginRight: '60px' }}>
+        {disenioDetalles ? (
+          <img
+            src={disenioDetalles.foto}
+            alt="Foto del diseño"
+            style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
+            onError={(e) => (e.target.style.display = 'none')}
+          />
+        ) : (
+          <p>Cargando...</p>
         )}
+      </div>
 
-{crearNuevoDisenio && 
-            <div style={{ display:"flex",flexDirection: "row"}}>
-            
-              
+      {/* Sección del Resto de los Detalles (Derecha) */}
+      <div style={{ flex: 1 }}>
+        <p><strong>Precio Estimado:</strong> {disenioDetalles.precioEstimado}€</p>
+        <p><strong>Fecha Estimada:</strong> {new Date(disenioDetalles.fechaEstimada).toLocaleDateString()}</p>
+        <p><strong>Tipo de mueble:</strong> {disenioDetalles.tipo}</p>
 
-            <div>
-              <p><strong>Precio Estimado:</strong>208.90€</p>
-              <p><strong>Fecha Estimada:</strong> {new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+        <Form onSubmit={handleSave}>
+          <div className="custom-form-input">
+            <Label for="alto" className="custom-form-input-label">Alto</Label>
+            <Input
+              type="text"
+              name="alto"
+              id="alto"
+              value={disenioDetalles.alto || ""}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
+          <div className="custom-form-input">
+            <Label for="ancho" className="custom-form-input-label">Ancho</Label>
+            <Input
+              type="text"
+              name="ancho"
+              id="ancho"
+              value={disenioDetalles.ancho || ""}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
+          <div className="custom-form-input">
+            <Label for="fondo" className="custom-form-input-label">Fondo</Label>
+            <Input
+              type="text"
+              name="fondo"
+              id="fondo"
+              value={disenioDetalles.fondo || ""}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
+
+          <div className="custom-form-input">
+            <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
+            <Input
+              type="text"
+              name="tipoPuerta"
+              id="tipoPuerta"
+              value={disenioDetalles.tipoPuerta || ""}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
+          <div className="custom-form-input">
+            <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
+            <Input
+              type="text"
+              name="numPuertas"
+              id="numPuertas"
+              value={disenioDetalles.numPuertas || ""}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
+
+          <div className="custom-button-row">
+            <button className="auth-button">Guardar cambios</button>
+          </div>
+        </Form>
+
+        <div>
+          <Button color="success" onClick={(event) => encargarDisenio(event)}>Encargar</Button>
+          <Button color="danger" onClick={() => handleDeleteDisenio(disenioDetalles.id)}>Borrar diseño</Button>
+        </div>
+
+        <button color="secondary" onClick={cerrarModal}>Cerrar</button>
+      </div>
+    </div>
+  </div>
+)}
 
 
 
-              <div className="custom-form-input">
-                <Label for="nombre" className="custom-form-input-label">Nombre para el diseño</Label>
-                <Input
-                  type="text"
-                  name="nombre"
-                  id="nombre"
-                  value={disenioNuevo.nombre || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                />
-              </div>
 
 
 
-              <div className="custom-form-input">
-                <Label for="tipo" className="custom-form-input-label">Tipo de mueble</Label>
-                <Input
-                  type="select"
-                  name="tipo"
-                  id="tipo"
-                  value={disenioNuevo.tipo || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                >
-                <option value="" disabled>Selecciona un tipo de mueble</option>
-            {tiposDeMueble.map((tipo) => (
-           <option key={tipo} value={tipo.toUpperCase()}>
-                {tipo}
-              </option>
-    ))}
-    </Input>
-              </div>
-         
-            
-            
-            
-              
-              <div className="custom-form-input">
-                <Label for="alto" className="custom-form-input-label">Alto</Label>
-                <Input
-                  type="text"
-                  name="alto"
-                  id="alto"
-                  value={disenioNuevo.alto || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                />
-              </div>
-             <div className="custom-form-input">
-                <Label for="ancho" className="custom-form-input-label">Ancho</Label>
-                <Input
-                  type="text"
-                  name="ancho"
-                  id="ancho"
-                  value={disenioNuevo.ancho || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                />
-              </div>
 
-            
-              <div className="custom-form-input">
-                <Label for="fondo" className="custom-form-input-label">Fondo</Label>
-                <Input
-                  type="text"
-                  name="fondo"
-                  id="fondo"
-                  value={disenioNuevo.fondo || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                />
-              </div>
-              <div className="custom-form-input">
-                <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
-                <Input
-                  type="text"
-                  name="tipoPuerta"
-                  id="tipoPuerta"
-                  value={disenioNuevo.tipoPuerta || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                />
-              </div>
-              <div className="custom-form-input">
-                <Label for="numPuertas" className="custom-form-input-label">Numero de puertas</Label>
-                <Input
-                  type="text"
-                  name="numPuertas"
-                  id="numPuertas"
-                  value={disenioNuevo.numPuertas || ""}
-                  onChange={handleChangeNuevo}
-                  className="custom-input"
-                />
-              </div>
-              
-            
-              <p style={{marginTop:20}}>(Una vez guardado podrá añadirle modulos a su diseño)</p>
-              <div className="custom-button-row">
-                <Button className="auth-button" onClick={(event)=> handleSubmitDisenioNuevo(event)}>Guardar cambios</Button>
-              </div>
-            
-            </div>
-            </div>}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{crearNuevoDisenio && (
+  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+    <div
+      style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '5px',
+        width: '100%',
+        maxWidth: '800px',
+        textAlign: 'center',
+      }}
+    >
+      <h5>Nuevo Diseño</h5>
+
+      <p><strong>Precio Estimado:</strong> 208.90€</p>
+      <p><strong>Fecha Estimada:</strong> {new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+
+      <div className="custom-form-input">
+        <Label for="nombre" className="custom-form-input-label">Nombre para el diseño</Label>
+        <Input
+          type="text"
+          name="nombre"
+          id="nombre"
+          value={disenioNuevo.nombre || ""}
+          onChange={handleChangeNuevo}
+          className="custom-input"
+        />
+      </div>
+
+      <div className="custom-form-input">
+        <Label for="tipo" className="custom-form-input-label">Tipo de mueble</Label>
+        <Input
+          type="select"
+          name="tipo"
+          id="tipo"
+          value={disenioNuevo.tipo || ""}
+          onChange={handleChangeNuevo}
+          className="custom-input"
+        >
+          <option value="" disabled>Selecciona un tipo de mueble</option>
+          {tiposDeMueble.map((tipo) => (
+            <option key={tipo} value={tipo.toUpperCase()}>
+              {tipo}
+            </option>
+          ))}
+        </Input>
+      </div>
+
+      <div className="custom-form-input">
+        <Label for="alto" className="custom-form-input-label">Alto</Label>
+        <Input
+          type="text"
+          name="alto"
+          id="alto"
+          value={disenioNuevo.alto || ""}
+          onChange={handleChangeNuevo}
+          className="custom-input"
+        />
+      </div>
+
+      <div className="custom-form-input">
+        <Label for="ancho" className="custom-form-input-label">Ancho</Label>
+        <Input
+          type="text"
+          name="ancho"
+          id="ancho"
+          value={disenioNuevo.ancho || ""}
+          onChange={handleChangeNuevo}
+          className="custom-input"
+        />
+      </div>
+
+      <div className="custom-form-input">
+        <Label for="fondo" className="custom-form-input-label">Fondo</Label>
+        <Input
+          type="text"
+          name="fondo"
+          id="fondo"
+          value={disenioNuevo.fondo || ""}
+          onChange={handleChangeNuevo}
+          className="custom-input"
+        />
+      </div>
+
+      <div className="custom-form-input">
+        <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
+        <Input
+          type="text"
+          name="tipoPuerta"
+          id="tipoPuerta"
+          value={disenioNuevo.tipoPuerta || ""}
+          onChange={handleChangeNuevo}
+          className="custom-input"
+        />
+      </div>
+
+      <div className="custom-form-input">
+        <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
+        <Input
+          type="text"
+          name="numPuertas"
+          id="numPuertas"
+          value={disenioNuevo.numPuertas || ""}
+          onChange={handleChangeNuevo}
+          className="custom-input"
+        />
+      </div>
+
+      <p style={{ marginTop: 20 }}>(Una vez guardado podrá añadirle módulos a su diseño)</p>
+      <div className="custom-button-row">
+        <Button className="auth-button" onClick={(event) => handleSubmitDisenioNuevo(event)}>Guardar cambios</Button>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );
