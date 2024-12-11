@@ -19,6 +19,9 @@ export default function Profile() {
   const [modulosDropdownOpen, setModulosDropdownOpen] = useState(false);
   const [nuevoModulo, setNuevoModulo] = useState({})
   const [mostrarNuevoModulo, setMostrarNuevoModulo] = useState(false)
+  const [crearNuevoDisenio,setCrearNuevoDisenio] = useState(false)
+  const [disenioNuevo, setDisenioNuevo] = useState({})
+
   const toggleModulosDropdown = () => {
     setModulosDropdownOpen(!modulosDropdownOpen);
   };
@@ -192,6 +195,42 @@ export default function Profile() {
     .catch((error) => alert(error.message));
   }
 
+
+ async function handleSubmitDisenioNuevo(event) {
+    event.preventDefault();
+    const updatedDisenio = {
+        ...disenioNuevo
+        
+        
+    };
+
+  
+ 
+   
+    fetch(`/api/kubico/diseniosNuevo`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedDisenio),
+    })
+    .then((response) => response.text())
+    .then((data) => {
+        setBorrarTrigger((prev)=> prev+1)
+        
+  
+        setCrearNuevoDisenio(false)
+        setDisenioNuevo({})
+
+       
+    })
+  
+    .catch((error) => alert(error.message));
+  }
+
+
   function handleSubmitModulos(event) {
     
     event.preventDefault();
@@ -272,6 +311,55 @@ export default function Profile() {
     
     setDisenioDetalles({ ...disenioDetalles, [name]: value });
   }
+  function handleChangeNuevo(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+
+    if(name ==="alto" &&!isNaN(value)){
+      const valor = parseFloat(value)
+      setImageHeight((prev)=> {
+        if(isNaN(valor)){
+          setAlturaImagenInicial(0)
+          return prev =200
+        }else{
+          if(valor > alturaImagenInicial){
+            setAlturaImagenInicial(valor)
+            return prev + 10
+          } else{
+            setAlturaImagenInicial(valor)
+            return prev - 10
+          }
+          
+        }
+        
+      })
+      
+    }
+    if(name ==="ancho" && !isNaN(value)){
+      const valor = parseFloat(value)
+      setImageWidth((prev)=> {
+        if(isNaN(valor)){
+          setAnchoImagenInicial(0)
+          return prev =200
+        }else{
+          if(valor > anchoImagenInicial){
+            setAnchoImagenInicial(valor)
+            return prev + 10
+          } else{
+            setAnchoImagenInicial(valor)
+            return prev - 10
+          }
+          
+        }
+        
+      })
+      
+    }
+    
+    setDisenioNuevo({ ...disenioNuevo, [name]: value });
+  }
 
   function handleChangeModulo(event, index) {
     const { name, value } = event.target;
@@ -346,7 +434,7 @@ export default function Profile() {
               />
             </div>
             <div className="custom-form-input">  
-              <Label for="iluminacion" className="custom-form-input-label">Iluminacion</Label>
+              <Label for="iluminacion" className="custom-form-input-label">Tipo de iluminacion</Label>
               <Input
                 type="text"
                 name="iluminacion"
@@ -357,7 +445,7 @@ export default function Profile() {
               />
             </div>
             <div className="custom-form-input">  
-              <Label for="pantalonero" className="custom-form-input-label">Pantalonero </Label>
+              <Label for="pantalonero" className="custom-form-input-label">Tipo de pantalonero </Label>
               <Input
                 type="text"
                 name="pantalonero"
@@ -368,7 +456,7 @@ export default function Profile() {
               />
             </div>
             <div className="custom-form-input">  
-              <Label for="zapatero" className="custom-form-input-label">Zapatero </Label>
+              <Label for="zapatero" className="custom-form-input-label">Tipo de zapatero </Label>
               <Input
                 type="text"
                 name="zapatero"
@@ -426,6 +514,8 @@ export default function Profile() {
   return (
     
     <div style={{ backgroundImage: '', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', height: '100vh', width: '100vw' }}>
+      {console.log(disenioNuevo)}
+      
       <div className="auth-page-container">
         {modal}
 
@@ -435,9 +525,18 @@ export default function Profile() {
         </div>
 
         {/* Tabla de disenios */}
-        {!mostrarDatosDisenio && (
+        {!mostrarDatosDisenio && !crearNuevoDisenio&& (
           <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '600px', height: '800px' }}>
+            <div style={{display:"flex", flexDirection:"row"}}>
             <h3>Lista de diseños</h3>
+            <Button color="primary" onClick={() => {setCrearNuevoDisenio(true)
+              setListaModulos([])
+              setNuevoModulo({})
+            }}>
+                          Crear nuevo diseño
+                        </Button>
+            </div>
+            
             {disenios.length > 0 ? (
               <Table responsive>
                 <thead>
@@ -472,7 +571,7 @@ export default function Profile() {
         )}
 
         {/* Modal de detalles del disenio */}
-        {mostrarDatosDisenio && disenioDetalles && (
+        {mostrarDatosDisenio && disenioDetalles && !crearNuevoDisenio && (
           <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width:'600px', height:'800px' }}>
             <h5>Nombre: {disenioDetalles.nombre}</h5>
             <div style={{ display:"flex",flexDirection: "row"}}>
@@ -495,7 +594,7 @@ export default function Profile() {
                           Borrar módulo
                         </Button>
                         </div>
-              <div className="custom-form-input">  
+              {modulo.alto && <div className="custom-form-input">  
               <Label for="alto" className="custom-form-input-label">Alto del modulo</Label>
               <Input
                 type="text"
@@ -505,8 +604,8 @@ export default function Profile() {
                 onChange={(event) => handleChangeModulo(event, index)}
                 className="custom-input"
               />
-            </div>
-            <div className="custom-form-input">  
+            </div>}
+            {modulo.ancho &&<div className="custom-form-input">  
               <Label for="ancho" className="custom-form-input-label">Ancho del modulo</Label>
               <Input
                 type="text"
@@ -516,8 +615,8 @@ export default function Profile() {
                 onChange={(event) => handleChangeModulo(event, index)}
                 className="custom-input"
               />
-            </div>
-            <div className="custom-form-input">  
+            </div>}
+            {modulo.fondo && <div className="custom-form-input">  
               <Label for="fondo" className="custom-form-input-label">Fondo del modulo</Label>
               <Input
                 type="text"
@@ -527,9 +626,9 @@ export default function Profile() {
                 onChange={(event) => handleChangeModulo(event, index)}
                 className="custom-input"
               />
-            </div>
+            </div>}
             {modulo.iluminacion && <div className="custom-form-input">  
-              <Label for="iluminacion" className="custom-form-input-label">Iluminacion</Label>
+              <Label for="iluminacion" className="custom-form-input-label">Tipo de iluminacion</Label>
               <Input
                 type="text"
                 name="iluminacion"
@@ -540,7 +639,7 @@ export default function Profile() {
               />
             </div>}
             {modulo.pantalonero && <div className="custom-form-input">  
-              <Label for="pantalonero" className="custom-form-input-label">Pantalonero </Label>
+              <Label for="pantalonero" className="custom-form-input-label">Tipo de pantalonero </Label>
               <Input
                 type="text"
                 name="pantalonero"
@@ -551,7 +650,7 @@ export default function Profile() {
               />
             </div>}
             {modulo.zapatero && <div className="custom-form-input">  
-              <Label for="zapatero" className="custom-form-input-label">Zapatero </Label>
+              <Label for="zapatero" className="custom-form-input-label">Tipo de zapatero </Label>
               <Input
                 type="text"
                 name="zapatero"
@@ -697,12 +796,127 @@ export default function Profile() {
             </div>
             </div>
             
-
+            
           
             
               
           </div>
         )}
+
+{crearNuevoDisenio && 
+            <div style={{ display:"flex",flexDirection: "row"}}>
+            
+              <div>
+            
+                <img src="http://localhost:8080/resources/images/foto_prueba.jpg"
+                alt="Foto del diseño"
+                style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, borderRadius: '50%',transition: 'all 0.3s ease-in-out' }}
+                onError={(e) => (e.target.style.display = 'none')}/>
+              
+            </div>
+
+            <div>
+              <p><strong>Precio Estimado:</strong>208.90€</p>
+              <p><strong>Fecha Estimada:</strong> {new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+
+
+
+              <div className="custom-form-input">
+                <Label for="nombre" className="custom-form-input-label">Nombre para el diseño</Label>
+                <Input
+                  type="text"
+                  name="nombre"
+                  id="nombre"
+                  value={disenioNuevo.nombre || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+
+
+
+              <div className="custom-form-input">
+                <Label for="tipo" className="custom-form-input-label">Tipo de mueble</Label>
+                <Input
+                  type="text"
+                  name="tipo"
+                  id="tipo"
+                  value={disenioNuevo.tipo || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+         
+            
+            
+            
+              
+              <div className="custom-form-input">
+                <Label for="alto" className="custom-form-input-label">Alto</Label>
+                <Input
+                  type="text"
+                  name="alto"
+                  id="alto"
+                  value={disenioNuevo.alto || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+             <div className="custom-form-input">
+                <Label for="ancho" className="custom-form-input-label">Ancho</Label>
+                <Input
+                  type="text"
+                  name="ancho"
+                  id="ancho"
+                  value={disenioNuevo.ancho || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+
+            
+              <div className="custom-form-input">
+                <Label for="fondo" className="custom-form-input-label">Fondo</Label>
+                <Input
+                  type="text"
+                  name="fondo"
+                  id="fondo"
+                  value={disenioNuevo.fondo || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
+                <Input
+                  type="text"
+                  name="tipoPuerta"
+                  id="tipoPuerta"
+                  value={disenioNuevo.tipoPuerta || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="numPuertas" className="custom-form-input-label">Numero de puertas</Label>
+                <Input
+                  type="text"
+                  name="numPuertas"
+                  id="numPuertas"
+                  value={disenioNuevo.numPuertas || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              
+            
+              <p style={{marginTop:20}}>(Una vez guardado podrá añadirle modulos a su diseño)</p>
+              <div className="custom-button-row">
+                <Button className="auth-button" onClick={(event)=> handleSubmitDisenioNuevo(event)}>Guardar cambios</Button>
+              </div>
+            
+            </div>
+            </div>}
       </div>
     </div>
   );

@@ -398,6 +398,13 @@ public class ControllerDeKubico {
             return ResponseEntity.ok(disenio);       
             
     }
+    @PostMapping("/diseniosNuevo")
+    public ResponseEntity<Disenio> crearDisenio(@RequestBody Disenio disenioNuevo) {
+            User currentUser = userService.findCurrentUser();
+            Disenio disenio = serviceDeKubico.saveDisenio(disenioNuevo,currentUser.getId());
+            return ResponseEntity.ok(disenio);       
+            
+    }
     @PutMapping("/disenios/{disenioId}/modulos")
     public ResponseEntity<List<Modulo>> actualizarModulosByDisenioId(@PathVariable Integer disenioId, @RequestBody List<Modulo> modulos) {
                
@@ -412,14 +419,6 @@ public class ControllerDeKubico {
             Pedido pedido = serviceDeKubico.encargarDisenio(disenioNuevo);
             return ResponseEntity.ok(pedido);
      
-    }
-
-    @PostMapping("/disenios")
-    public ResponseEntity<Disenio> crearDisenioNuevo( @RequestBody Disenio disenioNuevo) {
-        
-        Disenio disenio = serviceDeKubico.saveDisenio(disenioNuevo,userService.findCurrentUser().getId());
-        return ResponseEntity.ok(disenio);
-                
     }
 
 

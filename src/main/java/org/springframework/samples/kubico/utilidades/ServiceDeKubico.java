@@ -176,6 +176,15 @@ public class ServiceDeKubico {
     @Transactional
     public Disenio saveDisenio(Disenio disenio, Integer userId) {
         disenio.setCliente(findClienteByUserId(userId));
+        if(disenio.getFechaEstimada() ==null){
+            disenio.setFechaEstimada(LocalDate.now().plusDays(8));
+        }
+        if(disenio.getPrecioEstimado() ==null){
+            disenio.setPrecioEstimado(208.99);;
+        }
+        
+        disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg");
+        
         return disenioRepository.save(disenio);
     }
 
@@ -333,6 +342,7 @@ public class ServiceDeKubico {
     }
 
 
+
     //TODO CAMBIAR MODULOS
     @Transactional
     public Disenio actualizarDisenio(Disenio disenioNuevo) {
@@ -408,6 +418,7 @@ public class ServiceDeKubico {
 
     @Transactional
     public Disenio guardarDisenioNuevo(Disenio disenio){
+
         return disenioRepository.save(disenio);
 
     }
