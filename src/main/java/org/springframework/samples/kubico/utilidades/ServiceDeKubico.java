@@ -3,7 +3,7 @@ package org.springframework.samples.kubico.utilidades;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -444,11 +444,26 @@ public class ServiceDeKubico {
         pedido.setInteriorista(interioristaRepository.findById(1).get());
         pedido.setPagado("40%");
         pedido.setPrecio(disenio.getPrecioEstimado()!=null? disenio.getPrecioEstimado():700);
-        pedido.setReferencia("PEDIDOOOK");
+        pedido.setReferencia(generarReferenciaAleatoria());
 
         return guardarPedido(pedido);
         
     }
+
+
+public String generarReferenciaAleatoria() {
+    int longitud = 8; 
+    String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    Random random = new Random();
+    StringBuilder referencia = new StringBuilder();
+
+    for (int i = 0; i < longitud; i++) {
+        int index = random.nextInt(caracteres.length());
+        referencia.append(caracteres.charAt(index));
+    }
+
+    return referencia.toString();
+}
 
     
 }

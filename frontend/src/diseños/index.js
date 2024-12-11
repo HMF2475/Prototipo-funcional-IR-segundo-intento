@@ -815,7 +815,7 @@ export default function Profile() {
             />
           </div>
 
-          <div className="custom-form-input">
+          {disenioDetalles.tipo !== "VESTIDOR"&& <div className="custom-form-input">
             <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
             <Input
               type="text"
@@ -825,8 +825,8 @@ export default function Profile() {
               onChange={handleChange}
               className="custom-input"
             />
-          </div>
-          <div className="custom-form-input">
+          </div>}
+          {disenioDetalles.tipo === "ARMARIO" &&<div className="custom-form-input">
             <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
             <Input
               type="text"
@@ -836,7 +836,7 @@ export default function Profile() {
               onChange={handleChange}
               className="custom-input"
             />
-          </div>
+          </div>}
 
           <div className="custom-button-row">
             <button className="auth-button">Guardar cambios</button>
@@ -961,7 +961,7 @@ export default function Profile() {
         />
       </div>
 
-      <div className="custom-form-input">
+      {disenioNuevo.tipo !== "VESTIDOR" &&<div className="custom-form-input">
         <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
         <Input
           type="text"
@@ -971,9 +971,9 @@ export default function Profile() {
           onChange={handleChangeNuevo}
           className="custom-input"
         />
-      </div>
+      </div>}
 
-      <div className="custom-form-input">
+      {disenioNuevo.tipo === "ARMARIO" && <div className="custom-form-input">
         <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
         <Input
           type="text"
@@ -983,7 +983,7 @@ export default function Profile() {
           onChange={handleChangeNuevo}
           className="custom-input"
         />
-      </div>
+      </div>}
       <div style={{ flex: 1, textAlign: 'center', marginRight: '60px' }}>
         {disenioNuevo && disenioNuevo.tipo ? (
           <img
