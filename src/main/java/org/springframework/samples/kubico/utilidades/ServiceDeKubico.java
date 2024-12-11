@@ -182,8 +182,16 @@ public class ServiceDeKubico {
         if(disenio.getPrecioEstimado() ==null){
             disenio.setPrecioEstimado(208.99);;
         }
+        if(disenio.getTipo().toLowerCase() == "armario"){
+            disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg"); //TODO: CAMBIAR FOTO
+        } else if (disenio.getTipo().toLowerCase() == "puerta"){
+            disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg"); //TODO: CAMBIAR FOTO
+        } else if(disenio.getTipo().toLowerCase()=="vestidor"){
+            disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg"); //TODO: CAMBIAR FOTO
+        } else{
+            disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg");
+        }
         
-        disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg");
         
         return disenioRepository.save(disenio);
     }
@@ -416,12 +424,7 @@ public class ServiceDeKubico {
     }
 
 
-    @Transactional
-    public Disenio guardarDisenioNuevo(Disenio disenio){
-
-        return disenioRepository.save(disenio);
-
-    }
+ 
 
     @Transactional
     public Pedido guardarPedido(Pedido pedido){

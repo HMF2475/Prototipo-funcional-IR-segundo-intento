@@ -21,7 +21,8 @@ export default function Profile() {
   const [mostrarNuevoModulo, setMostrarNuevoModulo] = useState(false)
   const [crearNuevoDisenio,setCrearNuevoDisenio] = useState(false)
   const [disenioNuevo, setDisenioNuevo] = useState({})
-
+  const [fotoGenerica, setFotoGenerica] = useState("http://localhost:8080/resources/images/foto_prueba.jpg")
+  const tiposDeMueble = ["Armario", "Vestidor", "Frente"]
   const toggleModulosDropdown = () => {
     setModulosDropdownOpen(!modulosDropdownOpen);
   };
@@ -808,7 +809,7 @@ export default function Profile() {
             
               <div>
             
-                <img src="http://localhost:8080/resources/images/foto_prueba.jpg"
+                <img src={fotoGenerica}
                 alt="Foto del diseño"
                 style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, borderRadius: '50%',transition: 'all 0.3s ease-in-out' }}
                 onError={(e) => (e.target.style.display = 'none')}/>
@@ -838,13 +839,20 @@ export default function Profile() {
               <div className="custom-form-input">
                 <Label for="tipo" className="custom-form-input-label">Tipo de mueble</Label>
                 <Input
-                  type="text"
+                  type="select"
                   name="tipo"
                   id="tipo"
                   value={disenioNuevo.tipo || ""}
                   onChange={handleChangeNuevo}
                   className="custom-input"
-                />
+                >
+                <option value="" disabled>Selecciona un tipo de mueble</option>
+            {tiposDeMueble.map((tipo) => (
+           <option key={tipo} value={tipo.toUpperCase()}>
+                {tipo}
+              </option>
+    ))}
+    </Input>
               </div>
          
             
