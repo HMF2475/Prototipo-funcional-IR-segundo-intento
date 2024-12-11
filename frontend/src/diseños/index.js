@@ -960,7 +960,8 @@ export default function Profile() {
           className="custom-input"
         />
       </div>
-
+      
+      {disenioNuevo.tipo !== "VESTIDOR" && (
       <div className="custom-form-input">
         <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
         <Input
@@ -972,18 +973,20 @@ export default function Profile() {
           className="custom-input"
         />
       </div>
-
-      <div className="custom-form-input">
-        <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
-        <Input
-          type="text"
-          name="numPuertas"
-          id="numPuertas"
-          value={disenioNuevo.numPuertas || ""}
-          onChange={handleChangeNuevo}
-          className="custom-input"
-        />
-      </div>
+)}
+      {disenioNuevo.tipo !== "VESTIDOR" && (
+  <div className="custom-form-input">
+    <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
+    <Input
+      type="text"
+      name="numPuertas"
+      id="numPuertas"
+      value={disenioNuevo.numPuertas || ""}
+      onChange={handleChangeNuevo}
+      className="custom-input"
+    />
+  </div>
+)}
       <div style={{ flex: 1, textAlign: 'center', marginRight: '60px' }}>
         {disenioNuevo && disenioNuevo.tipo ? (
           <img
