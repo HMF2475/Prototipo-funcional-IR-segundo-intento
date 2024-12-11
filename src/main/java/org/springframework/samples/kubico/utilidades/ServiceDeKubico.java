@@ -183,11 +183,11 @@ public class ServiceDeKubico {
             disenio.setPrecioEstimado(208.99);;
         }
         if(disenio.getTipo().toLowerCase().equals("armario")){
-            disenio.setFoto("http://localhost:8080/resources/images/fotoArmario.jpg"); //TODO: CAMBIAR FOTO
+            disenio.setFoto("http://localhost:8080/resources/images/fotoArmario.jpg"); 
         } else if (disenio.getTipo().toLowerCase().equals("frente")){
-            disenio.setFoto("http://localhost:8080/resources/images/fotoPuerta.png"); //TODO: CAMBIAR FOTO
+            disenio.setFoto("http://localhost:8080/resources/images/fotoPuerta.png"); 
         } else if(disenio.getTipo().toLowerCase().equals("vestidor")){
-            disenio.setFoto("http://localhost:8080/resources/images/fotoVestidor.jpg"); //TODO: CAMBIAR FOTO
+            disenio.setFoto("http://localhost:8080/resources/images/fotoVestidor.jpg"); 
         }
         
         

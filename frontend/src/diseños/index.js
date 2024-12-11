@@ -21,7 +21,10 @@ export default function Profile() {
   const [mostrarNuevoModulo, setMostrarNuevoModulo] = useState(false)
   const [crearNuevoDisenio,setCrearNuevoDisenio] = useState(false)
   const [disenioNuevo, setDisenioNuevo] = useState({})
-  const [fotoGenerica, setFotoGenerica] = useState("http://localhost:8080/resources/images/foto_prueba.jpg")
+  const [fotoGenerica, setFotoGenerica] = useState("")
+  const fotoArmario = "http://localhost:8080/resources/images/fotoArmario.jpg"
+  const fotoPuerta = "http://localhost:8080/resources/images/fotoPuerta.png"
+  const fotoVestidor = "http://localhost:8080/resources/images/fotoVestidor.jpg"
   const tiposDeMueble = ["Armario", "Vestidor", "Frente"]
   const toggleModulosDropdown = () => {
     setModulosDropdownOpen(!modulosDropdownOpen);
@@ -206,7 +209,7 @@ export default function Profile() {
     };
 
   
-    console.log(updatedDisenio);
+
    
     fetch(`/api/kubico/diseniosNuevo`, {
       method: "POST",
@@ -217,14 +220,20 @@ export default function Profile() {
       },
       body: JSON.stringify(updatedDisenio),
     })
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((data) => {
         setBorrarTrigger((prev)=> prev+1)
         
   
         setCrearNuevoDisenio(false)
         setDisenioNuevo({})
-
+        setFotoGenerica("")
+        setDisenioDetalles(data);
+        setMostrarDatosDisenio(true);
+        setImageHeight(200)
+        setImageWidth(200)
+        setAlturaImagenInicial(data.alto)
+        setAnchoImagenInicial(data.ancho)
        
     })
   
@@ -278,10 +287,10 @@ export default function Profile() {
         }else{
           if(valor > alturaImagenInicial){
             setAlturaImagenInicial(valor)
-            return prev + 10
+            return prev + 15
           } else{
             setAlturaImagenInicial(valor)
-            return prev - 10
+            return prev - 15
           }
           
         }
@@ -298,10 +307,10 @@ export default function Profile() {
         }else{
           if(valor > anchoImagenInicial){
             setAnchoImagenInicial(valor)
-            return prev + 10
+            return prev + 15
           } else{
             setAnchoImagenInicial(valor)
-            return prev - 10
+            return prev - 15
           }
           
         }
@@ -327,10 +336,10 @@ export default function Profile() {
         }else{
           if(valor > alturaImagenInicial){
             setAlturaImagenInicial(valor)
-            return prev + 10
+            return prev + 15
           } else{
             setAlturaImagenInicial(valor)
-            return prev - 10
+            return prev - 15
           }
           
         }
@@ -347,10 +356,10 @@ export default function Profile() {
         }else{
           if(valor > anchoImagenInicial){
             setAnchoImagenInicial(valor)
-            return prev + 10
+            return prev + 15
           } else{
             setAnchoImagenInicial(valor)
-            return prev - 10
+            return prev - 15
           }
           
         }
@@ -359,6 +368,16 @@ export default function Profile() {
       
     }
     
+    if(name === "tipo"){
+      if(value==="ARMARIO"){
+        setFotoGenerica(fotoArmario)
+      } else if( value === "VESTIDOR"){
+        setFotoGenerica(fotoVestidor)
+      } else if(value==="FRENTE"){
+        setFotoGenerica(fotoPuerta)
+      }
+    }
+
     setDisenioNuevo({ ...disenioNuevo, [name]: value });
   }
 
@@ -530,7 +549,11 @@ export default function Profile() {
   <div style={{ marginTop: '20px', backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '5px', width: '600px', height: '800px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: '20px' }}>
       <h3 style={{ margin: 0, color: '#343a40' }}>Lista de Diseños</h3>
-      <Button color="success" onClick={() => { setCrearNuevoDisenio(true); setListaModulos([]); setNuevoModulo({}); }}>
+      <Button color="success" onClick={() => { setCrearNuevoDisenio(true); setListaModulos([]); setNuevoModulo({});
+    setImageHeight(200)
+    setImageWidth(200)
+    setAlturaImagenInicial(0)
+    setAnchoImagenInicial(0) }}>
         Crear Nuevo Diseño
       </Button>
     </div>
@@ -743,7 +766,7 @@ export default function Profile() {
           <img
             src={disenioDetalles.foto}
             alt="Foto del diseño"
-            style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
+            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '400px', maxWidth: '400px', objectFit: "fill", transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
             onError={(e) => (e.target.style.display = 'none')}
           />
         ) : (
@@ -960,6 +983,18 @@ export default function Profile() {
           onChange={handleChangeNuevo}
           className="custom-input"
         />
+      </div>
+      <div style={{ flex: 1, textAlign: 'center', marginRight: '60px' }}>
+        {disenioNuevo && disenioNuevo.tipo ? (
+          <img
+            src={fotoGenerica}
+            alt="Foto del diseño"
+            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '400px', maxWidth: '400px', objectFit: 'fill', transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
+            onError={(e) => (e.target.style.display = 'none')}
+          />
+        ) : (
+          <p>Seleccione primero el tipo de mueble para previsualizar la foto...</p>
+        )}
       </div>
 
       <p style={{ marginTop: 20 }}>(Una vez guardado podrá añadirle módulos a su diseño)</p>
