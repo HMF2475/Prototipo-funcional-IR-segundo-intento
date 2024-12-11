@@ -766,7 +766,7 @@ export default function Profile() {
           <img
             src={disenioDetalles.foto}
             alt="Foto del diseño"
-            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '400px', maxWidth: '400px', objectFit: "fill", transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
+            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '800px', maxWidth: '800px', objectFit: "fill", transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
             onError={(e) => (e.target.style.display = 'none')}
           />
         ) : (
@@ -815,7 +815,7 @@ export default function Profile() {
             />
           </div>
 
-          <div className="custom-form-input">
+          {disenioDetalles.tipo !== "VESTIDOR"&& <div className="custom-form-input">
             <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
             <Input
               type="text"
@@ -825,8 +825,8 @@ export default function Profile() {
               onChange={handleChange}
               className="custom-input"
             />
-          </div>
-          <div className="custom-form-input">
+          </div>}
+          {disenioDetalles.tipo === "ARMARIO" &&<div className="custom-form-input">
             <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
             <Input
               type="text"
@@ -836,7 +836,7 @@ export default function Profile() {
               onChange={handleChange}
               className="custom-input"
             />
-          </div>
+          </div>}
 
           <div className="custom-button-row">
             <button className="auth-button">Guardar cambios</button>
@@ -960,9 +960,10 @@ export default function Profile() {
           className="custom-input"
         />
       </div>
-      
-      {disenioNuevo.tipo !== "VESTIDOR" && (
-      <div className="custom-form-input">
+
+
+      {disenioNuevo.tipo !== "VESTIDOR" &&<div className="custom-form-input">
+
         <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
         <Input
           type="text"
@@ -972,27 +973,26 @@ export default function Profile() {
           onChange={handleChangeNuevo}
           className="custom-input"
         />
-      </div>
-)}
-      {disenioNuevo.tipo !== "VESTIDOR" && (
-  <div className="custom-form-input">
-    <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
-    <Input
-      type="text"
-      name="numPuertas"
-      id="numPuertas"
-      value={disenioNuevo.numPuertas || ""}
-      onChange={handleChangeNuevo}
-      className="custom-input"
-    />
-  </div>
-)}
+
+      </div>}
+
+      {disenioNuevo.tipo !== "ARMARIO" && <div className="custom-form-input">
+        <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
+        <Input
+          type="text"
+          name="numPuertas"
+          id="numPuertas"
+          value={disenioNuevo.numPuertas || ""}
+          onChange={handleChangeNuevo}
+          className="custom-input"
+        />
+      </div>}
       <div style={{ flex: 1, textAlign: 'center', marginRight: '60px' }}>
         {disenioNuevo && disenioNuevo.tipo ? (
           <img
             src={fotoGenerica}
             alt="Foto del diseño"
-            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '400px', maxWidth: '400px', objectFit: 'fill', transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
+            style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, maxHeight: '800px', maxWidth: '800px', objectFit: 'fill', transition: 'all 0.3s ease-in-out', marginRight: '20px' }}
             onError={(e) => (e.target.style.display = 'none')}
           />
         ) : (
