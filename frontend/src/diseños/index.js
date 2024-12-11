@@ -206,7 +206,7 @@ export default function Profile() {
     };
 
   
- 
+    console.log(updatedDisenio);
    
     fetch(`/api/kubico/diseniosNuevo`, {
       method: "POST",
@@ -706,11 +706,12 @@ export default function Profile() {
             {disenioDetalles ? (
                 <img src={disenioDetalles.foto}
                 alt="Foto del diseño"
-                style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, borderRadius: '50%',transition: 'all 0.3s ease-in-out' }}
+                style={{ width: `${imageWidth}px`, height: `${imageHeight}px`,transition: 'all 0.3s ease-in-out', marginRight:`20px`}}
                 onError={(e) => (e.target.style.display = 'none')}/>
               ) : (
                 <p>Cargando...</p>
               )}
+              {console.log(disenioDetalles)}
             </div>
 
             <div>
@@ -807,14 +808,7 @@ export default function Profile() {
 {crearNuevoDisenio && 
             <div style={{ display:"flex",flexDirection: "row"}}>
             
-              <div>
-            
-                <img src={fotoGenerica}
-                alt="Foto del diseño"
-                style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, borderRadius: '50%',transition: 'all 0.3s ease-in-out' }}
-                onError={(e) => (e.target.style.display = 'none')}/>
               
-            </div>
 
             <div>
               <p><strong>Precio Estimado:</strong>208.90€</p>

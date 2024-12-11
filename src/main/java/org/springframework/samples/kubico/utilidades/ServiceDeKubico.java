@@ -182,14 +182,12 @@ public class ServiceDeKubico {
         if(disenio.getPrecioEstimado() ==null){
             disenio.setPrecioEstimado(208.99);;
         }
-        if(disenio.getTipo().toLowerCase() == "armario"){
-            disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg"); //TODO: CAMBIAR FOTO
-        } else if (disenio.getTipo().toLowerCase() == "puerta"){
-            disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg"); //TODO: CAMBIAR FOTO
-        } else if(disenio.getTipo().toLowerCase()=="vestidor"){
-            disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg"); //TODO: CAMBIAR FOTO
-        } else{
-            disenio.setFoto("http://localhost:8080/resources/images/foto_prueba.jpg");
+        if(disenio.getTipo().toLowerCase().equals("armario")){
+            disenio.setFoto("http://localhost:8080/resources/images/fotoArmario.jpg"); //TODO: CAMBIAR FOTO
+        } else if (disenio.getTipo().toLowerCase().equals("frente")){
+            disenio.setFoto("http://localhost:8080/resources/images/fotoPuerta.png"); //TODO: CAMBIAR FOTO
+        } else if(disenio.getTipo().toLowerCase().equals("vestidor")){
+            disenio.setFoto("http://localhost:8080/resources/images/fotoVestidor.jpg"); //TODO: CAMBIAR FOTO
         }
         
         
