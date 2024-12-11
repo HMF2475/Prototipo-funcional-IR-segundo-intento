@@ -11,17 +11,14 @@ import org.springframework.samples.kubico.cliente.Cliente;
 import org.springframework.samples.kubico.interiorista.Interiorista;
 import org.springframework.samples.kubico.montador.Montador;
 import org.springframework.samples.kubico.auth.payload.request.SignupRequest;
-import org.springframework.samples.kubico.clinic.ClinicService;
 
-import org.springframework.samples.kubico.clinicowner.ClinicOwnerService;
 
-import org.springframework.samples.kubico.owner.OwnerService;
 import org.springframework.samples.kubico.user.Authorities;
 import org.springframework.samples.kubico.user.AuthoritiesService;
 import org.springframework.samples.kubico.user.User;
 import org.springframework.samples.kubico.user.UserService;
 
-import org.springframework.samples.kubico.vet.VetService;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,21 +28,15 @@ public class AuthService {
 	private final PasswordEncoder encoder;
 	private final AuthoritiesService authoritiesService;
 	private final UserService userService;
-	private final OwnerService ownerService;
-	private final VetService vetService;
-	private final ClinicOwnerService clinicOwnerService;
-	private final ClinicService clinicService;
+
 private final ServiceDeKubico serviceDeKubico;
 	@Autowired
 	public AuthService(PasswordEncoder encoder, AuthoritiesService authoritiesService, UserService userService,
-			OwnerService ownerService, VetService vetService, ClinicOwnerService clinicOwnerService, ClinicService clinicService, ServiceDeKubico serviceDeKubico) {
+			 ServiceDeKubico serviceDeKubico) {
 		this.encoder = encoder;
 		this.authoritiesService = authoritiesService;
 		this.userService = userService;
-		this.ownerService = ownerService;
-		this.vetService = vetService;
-		this.clinicOwnerService = clinicOwnerService;
-		this.clinicService = clinicService;
+
 		this.serviceDeKubico = serviceDeKubico;
 	}
 

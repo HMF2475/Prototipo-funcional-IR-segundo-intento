@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Table, Form, Input, Label, Link} from 'reactstrap';
 import useFetchState from '../util/useFetchState';
 import tokenService from "../services/token.service";
@@ -11,18 +11,18 @@ export default function ListaUsuarios() {
   const [visible, setVisible]= useState(false)
   const [message, setMessage] = useState(null);
 
+  const roles = ["Montador", "Cliente", "Interiorista"];
+  const sexos = ["Hombre", "Mujer", "Otro"];
+
   const [perfiles, setPerfiles] = useFetchState(
     [], "/api/kubico/usuarios", jwt, setMessage, setVisible
   );
 
-
-
+const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
+  const [perfilNuevo, setPerfilNuevo] = useState({})
   const[perfil, setPerfil] = useState(null)
   const [mostrarDatosPerfil, setMostrarDatosPerfil] = useState(false);
-  // TODO
-  const handleAddUser = () => {
-    console.log('Añadir Usuario');
-  };
+ 
 
 
 
@@ -47,9 +47,12 @@ export default function ListaUsuarios() {
                 
             })
     }
-    fetchUsuarios();
+    if(!añadirUsuarioMostrar){
+      fetchUsuarios();
 
-    intervalId = setInterval(fetchUsuarios, 1000);
+      intervalId = setInterval(fetchUsuarios, 1000);
+    }
+    
     
     return () => clearInterval(intervalId)
 },[borrarTrigger])
@@ -75,6 +78,12 @@ export default function ListaUsuarios() {
           
   };
 
+
+
+
+
+
+  
   
   const handleViewDetails = (perfil) => {
         setPerfil(perfil)
@@ -90,11 +99,13 @@ export default function ListaUsuarios() {
     event.preventDefault();
     const updatedPerfil = {
         ...perfil,
+        sexo: perfil.sexo?.toUpperCase(),
+        rol: perfil.rol?.toUpperCase() 
         
         
     };
     
-    fetch("/api/kubico/perfil/edit", {
+    fetch("/api/kubico/perfil/editOtro?username=" + perfil.username , {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -105,22 +116,36 @@ export default function ListaUsuarios() {
     })
     .then((response) => response.text())
     .then((data) => {
-      if (data === "RELOG") {
-        tokenService.removeUser()
-        navigate("/login");
-      } else if (data === "HOME") {
-        console.log(data)
-        navigate("/home");
-      } else {
-        let json = JSON.parse(data);
-        if (json.message) {
-          let mensaje = "Status Code: " + json.statusCode + " -> " + json.message;
-          setMessage(mensaje);
-          setVisible(true);
-        } else {
-          navigate("/home");
-        }
-      }
+      setMostrarDatosPerfil(false)
+    })
+    .catch((error) => alert(error.message));
+  }
+
+  function handleSubmitNuevo(event) {
+    event.preventDefault();
+    const updatedPerfil = {
+        ...perfilNuevo,
+        sexo: perfilNuevo.sexo?.toUpperCase(),
+        rol: perfilNuevo.rol?.toUpperCase() 
+        
+        
+        
+    };
+    
+    fetch("/api/kubico/perfil/crearOtro" , {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedPerfil),
+    })
+    .then((response) => response.text())
+    .then((data) => {
+      setAñadirUsuarioMostrar(false)
+      setBorrarTrigger((prev)=> prev +1)
+      setPerfilNuevo({})
     })
     .catch((error) => alert(error.message));
   }
@@ -132,6 +157,13 @@ export default function ListaUsuarios() {
     setPerfil({ ...perfil, [name]: value });
   }
 
+  function handleChangeNuevo(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    setPerfilNuevo({...perfilNuevo, [name]:value});
+  }
+
 
 
 
@@ -139,12 +171,15 @@ export default function ListaUsuarios() {
     <div style={{ padding: '20px' }}>
       <h3>
         Lista de Usuarios{' '}
-        <Button color="success" onClick={handleAddUser}>
+        <Button color="success" onClick={() => {
+          setAñadirUsuarioMostrar(true)
+          setPerfilNuevo({...perfilNuevo, authority: "Cliente"})
+          }}>
           Añadir Usuario
         </Button>
       </h3>
       {message && <p style={{ color: 'red' }}>{message}</p>}
-      {!mostrarDatosPerfil &&<Table responsive striped bordered>
+      {!mostrarDatosPerfil && !añadirUsuarioMostrar&&<Table responsive striped bordered>
         <thead>
           <tr>
             <th>Nombre</th>
@@ -180,31 +215,29 @@ export default function ListaUsuarios() {
         
       {modal}
        
-            
+            <h3>Nombre de usuario: {perfil.username}</h3>
              <Form onSubmit={handleSubmit}>
               {/* Datos del Usuario */}
-              <div className="custom-form-input">
-                <Label for="username" className="custom-form-input-label">Nombre de usuario</Label>
-                <Input
-                  type="text"
-                  name="username"
-                  id="username"
-                  value={perfil.username || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
+              
               {perfil.authority !== "CLIENTE" && <div className="custom-form-input">
-                <Label for="authority" className="custom-form-input-label">Nombre de usuario</Label>
-                <Input
-                  type="text"
-                  name="authority"
-                  id="authority"
-                  value={perfil.authority || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>}
+  <Label for="authority" className="custom-form-input-label">Rol</Label>
+  <Input
+    type="select"
+    name="authority"
+    id="authority"
+    value={perfil.authority || ""}
+    onChange={handleChange}
+    className="custom-input"
+  >
+    <option value="" disabled>Selecciona un rol</option>
+    {roles.map((rol) => (
+      <option key={rol} value={rol.toUpperCase()}>
+        {rol}
+      </option>
+    ))}
+  </Input>
+</div>
+}
 
             
               <div className="custom-form-input">
@@ -219,12 +252,23 @@ export default function ListaUsuarios() {
                 />
               </div>
               <div className="custom-form-input">
-                <Label for="second_name" className="custom-form-input-label">Segundo</Label>
+                <Label for="second_name" className="custom-form-input-label">Segundo nombre</Label>
                 <Input
                   type="text"
                   name="second_name"
                   id="second_name"
                   value={perfil.second_name || ""}
+                  onChange={handleChange}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="lastName" className="custom-form-input-label">Apellido</Label>
+                <Input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  value={perfil.lastName || ""}
                   onChange={handleChange}
                   className="custom-input"
                 />
@@ -252,27 +296,24 @@ export default function ListaUsuarios() {
                 />
               </div>
               <div className="custom-form-input">
-                <Label for="sexo" className="custom-form-input-label">Sexo</Label>
-                <Input
-                  type="text"
-                  name="sexo"
-                  id="sexo"
-                  value={perfil.sexo || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
-              <div className="custom-form-input">
-                <Label for="lastName" className="custom-form-input-label">Apellido</Label>
-                <Input
-                  type="text"
-                  name="lastName"
-                  id="lastName"
-                  value={perfil.lastName || ""}
-                  onChange={handleChange}
-                  className="custom-input"
-                />
-              </div>
+  <Label for="sexo" className="custom-form-input-label">Sexo</Label>
+  <Input
+    type="select"
+    name="sexo"
+    id="sexo"
+    value={perfil.sexo || ""}
+    onChange={handleChange}
+    className="custom-input"
+  >
+    <option value="" disabled>Selecciona una opción</option>
+    {sexos.map((sexo) => (
+      <option key={sexo} value={sexo.toUpperCase()}>
+        {sexo}
+      </option>
+    ))}
+  </Input>
+</div>
+              
             
               
               <div className="custom-button-row">
@@ -285,6 +326,145 @@ export default function ListaUsuarios() {
             </Form>
           
           </>)}
+
+          {añadirUsuarioMostrar && !mostrarDatosPerfil &&<>
+
+            {modal}
+            <div className="auth-page-container">
+      <h1>Añadir usuario</h1>
+      <div className="auth-form-container">
+      <Form onSubmit={handleSubmitNuevo}>
+              {/* Datos del Usuario */}
+              <div className="custom-form-input">
+                <Label for="username" className="custom-form-input-label">Nombre de usuario</Label>
+                <Input
+                  type="text"
+                  name="username"
+                  id="username"
+                  value={perfilNuevo.username || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="password" className="custom-form-input-label">Contraseña</Label>
+                <Input
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={perfilNuevo.password || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+  <Label for="authority" className="custom-form-input-label">Rol</Label>
+  <Input
+    type="select"
+    name="authority"
+    id="authority"
+    value={perfilNuevo.authority || ""}
+    onChange={handleChangeNuevo}
+    className="custom-input"
+  >
+    <option value="" disabled>Selecciona un rol</option>
+    {roles.map((rol) => (
+      <option key={rol} value={rol.toUpperCase()}>
+        {rol}
+      </option>
+    ))}
+  </Input>
+</div>
+
+
+            
+              <div className="custom-form-input">
+                <Label for="firstName" className="custom-form-input-label">Nombre</Label>
+                <Input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  value={perfilNuevo.firstName || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="second_name" className="custom-form-input-label">Segundo nombre</Label>
+                <Input
+                  type="text"
+                  name="second_name"
+                  id="second_name"
+                  value={perfilNuevo.second_name || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="lastName" className="custom-form-input-label">Apellido</Label>
+                <Input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  value={perfilNuevo.lastName || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="telefono" className="custom-form-input-label">Telefono</Label>
+                <Input
+                  type="phone"
+                  name="telefono"
+                  id="telefono"
+                  value={perfilNuevo.telefono || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="direccion" className="custom-form-input-label">Direccion</Label>
+                <Input
+                  type="text"
+                  name="direccion"
+                  id="direccion"
+                  value={perfilNuevo.direccion || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+  <Label for="sexo" className="custom-form-input-label">Sexo</Label>
+  <Input
+    type="select"
+    name="sexo"
+    id="sexo"
+    value={perfilNuevo.sexo || ""}
+    onChange={handleChangeNuevo}
+    className="custom-input"
+  >
+    <option value="" disabled>Selecciona una opción</option>
+    {sexos.map((sexo) => (
+      <option key={sexo} value={sexo.toUpperCase()}>
+        {sexo}
+      </option>
+    ))}
+  </Input>
+</div>
+              
+            
+              
+              <div className="custom-button-row">
+                <button className="auth-button">Guardar</button>
+                <Button onClick={() => {
+                    setPerfilNuevo(null)
+                    setAñadirUsuarioMostrar(false)
+                }}>Volver</Button>
+              </div>
+            </Form>
+      </div>
+    </div>
+          </>}
     </div>
   );
 }

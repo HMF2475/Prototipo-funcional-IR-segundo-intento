@@ -30,8 +30,8 @@ public class Modulo extends BaseEntity {
     @Column(name = "num_cajoneras")
     Integer numCajoneras;
 
-    @Column(name = "num_baldas")
-    Integer numBaldas;
+    @Column(name = "altura_balda")
+    Integer alturaBalda;
 
     @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST })
 	@JoinColumn(name = "disenio_id", referencedColumnName = "id")

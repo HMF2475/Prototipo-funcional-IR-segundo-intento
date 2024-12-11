@@ -85,6 +85,8 @@ public class SecurityConfiguration {
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/kubico/**")).permitAll()
 			.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.PATCH, "/api/kubico/pedidos/**")).permitAll()
+			.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/kubico/perfil/**")).permitAll()
+			.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.PUT, "/api/kubico/perfil/**")).permitAll()
 			.anyRequest().permitAll())					
 			
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		

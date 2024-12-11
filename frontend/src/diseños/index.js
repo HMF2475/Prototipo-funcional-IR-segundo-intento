@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import tokenService from "../services/token.service";
 import getErrorModal from "../util/getErrorModal";
 import useFetchState from "../util/useFetchState";
-import { Table, Button, Form, Input, Label, } from "reactstrap";
+import { Table, Button, Form, Input, Label, Collapse } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
 const jwt = tokenService.getLocalAccessToken();
@@ -15,12 +15,30 @@ export default function Profile() {
   const [disenioDetalles, setDisenioDetalles] = useState(null);
   const [encargarTrigger, setEncargarTrigger] = useState(0)
   const [borrarTrigger, setBorrarTrigger] = useState(0)
+  const [listaModulos, setListaModulos] = useState([])
+  const [modulosDropdownOpen, setModulosDropdownOpen] = useState(false);
+  const [nuevoModulo, setNuevoModulo] = useState({})
+  const [mostrarNuevoModulo, setMostrarNuevoModulo] = useState(false)
+  const [crearNuevoDisenio,setCrearNuevoDisenio] = useState(false)
+  const [disenioNuevo, setDisenioNuevo] = useState({})
 
+  const toggleModulosDropdown = () => {
+    setModulosDropdownOpen(!modulosDropdownOpen);
+  };
 
-  // Usamos el hook useFetchState para obtener los disenios
+  
+    const [imageWidth, setImageWidth] = useState(200);  
+    const [imageHeight, setImageHeight] = useState(200);  
+
+    const [anchoImagenInicial, setAnchoImagenInicial]= useState(0)
+    const [alturaImagenInicial, setAlturaImagenInicial]= useState(0)
+    
+
   const [disenios, setDisenios] = useFetchState(
     {}, "/api/kubico/disenios", jwt, setMessage, setVisible
   );
+
+  
 
 
   useEffect(() => { //¿Hace falta que sea así?
@@ -46,7 +64,7 @@ export default function Profile() {
     fetchDisenios();
 
     intervalId = setInterval(fetchDisenios, 4000);
-    
+
     return () => clearInterval(intervalId)
 },[ disenioId, borrarTrigger, encargarTrigger])
 
@@ -67,20 +85,39 @@ export default function Profile() {
       .then((data) => {
         setDisenioDetalles(data);
         setMostrarDatosDisenio(true);
+        setImageHeight(200)
+        setImageWidth(200)
+        setAlturaImagenInicial(data.alto)
+        setAnchoImagenInicial(data.ancho)
       })
       .catch((error) => {
         setMessage("Error al cargar los detalles del disenio.");
         setVisible(true);
       });
+
+      fetch(`/api/kubico/disenios/${id}/modulos`)
+            .then((response)=> response.json())
+            .then((data)=>{
+              setListaModulos(data)
+             
+            })
+            .catch((error) => {
+              setMessage("Error al cargar los modulos del disenio.");
+              setVisible(true);
+            });
+
   };
 
   
-  function encargarDisenio () {
+  function encargarDisenio (event) {
+    event.preventDefault();
     const updatedDisenio = {
         ...disenioDetalles,
         
         
     };
+
+    handleSave(event)
     fetch(`/api/kubico/disenios/${updatedDisenio.id}`, {
       method: 'POST',
       headers: {
@@ -158,16 +195,327 @@ export default function Profile() {
     .catch((error) => alert(error.message));
   }
 
+
+ async function handleSubmitDisenioNuevo(event) {
+    event.preventDefault();
+    const updatedDisenio = {
+        ...disenioNuevo
+        
+        
+    };
+
+  
+ 
+   
+    fetch(`/api/kubico/diseniosNuevo`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedDisenio),
+    })
+    .then((response) => response.text())
+    .then((data) => {
+        setBorrarTrigger((prev)=> prev+1)
+        
+  
+        setCrearNuevoDisenio(false)
+        setDisenioNuevo({})
+
+       
+    })
+  
+    .catch((error) => alert(error.message));
+  }
+
+
+  function handleSubmitModulos(event) {
+    
+    event.preventDefault();
+    const updatedListaModulos= Object.values(listaModulos);
+    console.log(updatedListaModulos)
+    fetch(`/api/kubico/disenios/${disenioDetalles.id}/modulos`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedListaModulos),
+    })
+    .then((response) => response.text())
+    .then((data) => {
+        setBorrarTrigger((prev)=> prev+1)
+        setDisenioDetalles(null)
+        setMostrarDatosDisenio(false)
+        setMostrarNuevoModulo(false)
+    })
+    .catch((error) => alert(error.message));
+  }
+
+  function deleteModulo(indiceModulo){
+    let listaModulosNueva = listaModulos
+    listaModulosNueva.pop(indiceModulo)
+    setListaModulos(listaModulosNueva)
+    setBorrarTrigger((prev)=> prev+1)
+  }
+
   function handleChange(event) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+
+
+    if(name ==="alto" &&!isNaN(value)){
+      const valor = parseFloat(value)
+      setImageHeight((prev)=> {
+        if(isNaN(valor)){
+          setAlturaImagenInicial(0)
+          return prev =200
+        }else{
+          if(valor > alturaImagenInicial){
+            setAlturaImagenInicial(valor)
+            return prev + 10
+          } else{
+            setAlturaImagenInicial(valor)
+            return prev - 10
+          }
+          
+        }
+        
+      })
+      
+    }
+    if(name ==="ancho" && !isNaN(value)){
+      const valor = parseFloat(value)
+      setImageWidth((prev)=> {
+        if(isNaN(valor)){
+          setAnchoImagenInicial(0)
+          return prev =200
+        }else{
+          if(valor > anchoImagenInicial){
+            setAnchoImagenInicial(valor)
+            return prev + 10
+          } else{
+            setAnchoImagenInicial(valor)
+            return prev - 10
+          }
+          
+        }
+        
+      })
+      
+    }
+    
     setDisenioDetalles({ ...disenioDetalles, [name]: value });
+  }
+  function handleChangeNuevo(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+
+    if(name ==="alto" &&!isNaN(value)){
+      const valor = parseFloat(value)
+      setImageHeight((prev)=> {
+        if(isNaN(valor)){
+          setAlturaImagenInicial(0)
+          return prev =200
+        }else{
+          if(valor > alturaImagenInicial){
+            setAlturaImagenInicial(valor)
+            return prev + 10
+          } else{
+            setAlturaImagenInicial(valor)
+            return prev - 10
+          }
+          
+        }
+        
+      })
+      
+    }
+    if(name ==="ancho" && !isNaN(value)){
+      const valor = parseFloat(value)
+      setImageWidth((prev)=> {
+        if(isNaN(valor)){
+          setAnchoImagenInicial(0)
+          return prev =200
+        }else{
+          if(valor > anchoImagenInicial){
+            setAnchoImagenInicial(valor)
+            return prev + 10
+          } else{
+            setAnchoImagenInicial(valor)
+            return prev - 10
+          }
+          
+        }
+        
+      })
+      
+    }
+    
+    setDisenioNuevo({ ...disenioNuevo, [name]: value });
+  }
+
+  function handleChangeModulo(event, index) {
+    const { name, value } = event.target;
+    const updatedModulos = [...listaModulos];
+    updatedModulos[index] = { ...updatedModulos[index], [name]: value };
+    setListaModulos(updatedModulos);
+  }
+
+  
+  function handleSave(event) {
+    event.preventDefault();
+    handleSubmit(event); 
+    handleSubmitModulos(event); 
+  }
+
+  function handleChangeNuevoModulo(event) {
+    const { name, value } = event.target;
+    setNuevoModulo((prevModulo) => ({
+      ...prevModulo,
+      [name]: value
+    }));
+  }
+
+  function guardarModuloNuevo(){
+    const modulos = [...listaModulos]
+    modulos.push(nuevoModulo)
+    setListaModulos(modulos)
+
+  }
+
+  function crearNuevoModulo () {
+    
+
+    return (<div>
+      <p>Módulo nº {listaModulos.length +1}      </p>
+      <Button color="danger" style={{ marginRight: "10px", marginLeft:"10px" }} onClick={()=>{setNuevoModulo({})
+                                                                                              setMostrarNuevoModulo(false)}}>
+                          Borrar módulo
+                        </Button>
+                        
+<div className="custom-form-input">  
+              <Label for="alto" className="custom-form-input-label">Alto del modulo</Label>
+              <Input
+                type="text"
+                name="alto"
+                id="alto"
+                value={nuevoModulo.alto || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">  
+              <Label for="ancho" className="custom-form-input-label">Ancho del modulo</Label>
+              <Input
+                type="text"
+                name="ancho"
+                id="ancho"
+                value={nuevoModulo.ancho || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">  
+              <Label for="fondo" className="custom-form-input-label">Fondo del modulo</Label>
+              <Input
+                type="text"
+                name="fondo"
+                id="fondo"
+                value={nuevoModulo.fondo || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">  
+              <Label for="iluminacion" className="custom-form-input-label">Tipo de iluminacion</Label>
+              <Input
+                type="text"
+                name="iluminacion"
+                id="iluminacion"
+                value={nuevoModulo.iluminacion || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">  
+              <Label for="pantalonero" className="custom-form-input-label">Tipo de pantalonero </Label>
+              <Input
+                type="text"
+                name="pantalonero"
+                id="pantalonero"
+                value={nuevoModulo.pantalonero || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">  
+              <Label for="zapatero" className="custom-form-input-label">Tipo de zapatero </Label>
+              <Input
+                type="text"
+                name="zapatero"
+                id="zapatero"
+                value={nuevoModulo.zapatero || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">  
+              <Label for="tipoMaterial" className="custom-form-input-label">Tipo de material</Label>
+              <Input
+                type="text"
+                name="tipoMaterial"
+                id="tipoMaterial"
+                value={nuevoModulo.tipoMaterial || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">  
+              <Label for="numCajoneras" className="custom-form-input-label">Numero de cajoneras</Label>
+              <Input
+                type="text"
+                name="numCajoneras"
+                id="numCajoneras"
+                value={nuevoModulo.numCajoneras || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+         <div className="custom-form-input">  
+              <Label for="alturaBalda" className="custom-form-input-label">Altura de la balda</Label>
+              <Input
+                type="text"
+                name="alturaBalda"
+                id="alturaBalda"
+                value={nuevoModulo.alturaBalda || ""}
+                onChange={handleChangeNuevoModulo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-button-row">
+                <button className="auth-button" onClick={()=> {guardarModuloNuevo()
+                  setNuevoModulo({})
+                  setMostrarNuevoModulo(false)
+                }}>Guardar modulo nuevo</button>
+              </div>
+            
+            </div>
+            )
   }
 
 
   return (
+    
     <div style={{ backgroundImage: '', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', height: '100vh', width: '100vw' }}>
+      {console.log(disenioNuevo)}
+      
       <div className="auth-page-container">
         {modal}
 
@@ -177,9 +525,18 @@ export default function Profile() {
         </div>
 
         {/* Tabla de disenios */}
-        {!mostrarDatosDisenio && (
+        {!mostrarDatosDisenio && !crearNuevoDisenio&& (
           <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '600px', height: '800px' }}>
+            <div style={{display:"flex", flexDirection:"row"}}>
             <h3>Lista de diseños</h3>
+            <Button color="primary" onClick={() => {setCrearNuevoDisenio(true)
+              setListaModulos([])
+              setNuevoModulo({})
+            }}>
+                          Crear nuevo diseño
+                        </Button>
+            </div>
+            
             {disenios.length > 0 ? (
               <Table responsive>
                 <thead>
@@ -214,16 +571,156 @@ export default function Profile() {
         )}
 
         {/* Modal de detalles del disenio */}
-        {mostrarDatosDisenio && disenioDetalles && (
+        {mostrarDatosDisenio && disenioDetalles && !crearNuevoDisenio && (
           <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width:'600px', height:'800px' }}>
-            {console.log(disenioDetalles)}
             <h5>Nombre: {disenioDetalles.nombre}</h5>
+            <div style={{ display:"flex",flexDirection: "row"}}>
+            
+            <div>
+                <h5>Lista de módulos</h5>
+                <Button color="info" onClick={toggleModulosDropdown}>
+                  {modulosDropdownOpen ? "Ocultar módulos" : "Mostrar módulos"}
+                </Button>
+                <Button color="success" style={{ marginLeft: "10px" }} onClick={()=> setMostrarNuevoModulo(true)}>
+                  Añadir módulo
+                </Button>
+                <Collapse isOpen={modulosDropdownOpen}>
+                  {listaModulos.length > 0 ? (
+                    listaModulos.map((modulo, index) => (
+                      <div key={index} style={{ marginBottom: "10px" }}>
+                        <div style={{display:"flex", flexDirection:"row"}}>
+                        <p>Módulo nº {index + 1}      </p>
+                        <Button color="danger" style={{ marginRight: "10px", marginLeft:"10px" }} onClick={()=>deleteModulo(index)}>
+                          Borrar módulo
+                        </Button>
+                        </div>
+              {modulo.alto && <div className="custom-form-input">  
+              <Label for="alto" className="custom-form-input-label">Alto del modulo</Label>
+              <Input
+                type="text"
+                name="alto"
+                id="alto"
+                value={modulo.alto || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            {modulo.ancho &&<div className="custom-form-input">  
+              <Label for="ancho" className="custom-form-input-label">Ancho del modulo</Label>
+              <Input
+                type="text"
+                name="ancho"
+                id="ancho"
+                value={modulo.ancho || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            {modulo.fondo && <div className="custom-form-input">  
+              <Label for="fondo" className="custom-form-input-label">Fondo del modulo</Label>
+              <Input
+                type="text"
+                name="fondo"
+                id="fondo"
+                value={modulo.fondo || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            {modulo.iluminacion && <div className="custom-form-input">  
+              <Label for="iluminacion" className="custom-form-input-label">Tipo de iluminacion</Label>
+              <Input
+                type="text"
+                name="iluminacion"
+                id="iluminacion"
+                value={modulo.iluminacion || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            {modulo.pantalonero && <div className="custom-form-input">  
+              <Label for="pantalonero" className="custom-form-input-label">Tipo de pantalonero </Label>
+              <Input
+                type="text"
+                name="pantalonero"
+                id="pantalonero"
+                value={modulo.pantalonero || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            {modulo.zapatero && <div className="custom-form-input">  
+              <Label for="zapatero" className="custom-form-input-label">Tipo de zapatero </Label>
+              <Input
+                type="text"
+                name="zapatero"
+                id="zapatero"
+                value={modulo.zapatero || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            {modulo.tipoMaterial && <div className="custom-form-input">  
+              <Label for="tipoMaterial" className="custom-form-input-label">Tipo de material</Label>
+              <Input
+                type="text"
+                name="tipoMaterial"
+                id="tipoMaterial"
+                value={modulo.tipoMaterial || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            {modulo.numCajoneras && <div className="custom-form-input">  
+              <Label for="numCajoneras" className="custom-form-input-label">Numero de cajoneras</Label>
+              <Input
+                type="text"
+                name="numCajoneras"
+                id="numCajoneras"
+                value={modulo.numCajoneras || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            {modulo.alturaBalda && <div className="custom-form-input">  
+              <Label for="alturaBalda" className="custom-form-input-label">Altura de la balda</Label>
+              <Input
+                type="text"
+                name="alturaBalda"
+                id="alturaBalda"
+                value={modulo.alturaBalda || ""}
+                onChange={(event) => handleChangeModulo(event, index)}
+                className="custom-input"
+              />
+            </div>}
+            </div>
+          ))
+                  ) : (
+                    <p>No hay módulos en este diseño</p>
+                  )}
+                  {mostrarNuevoModulo && crearNuevoModulo()}
+                </Collapse>
+              </div>
+            <div>
+            {disenioDetalles ? (
+                <img src={disenioDetalles.foto}
+                alt="Foto del diseño"
+                style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, borderRadius: '50%',transition: 'all 0.3s ease-in-out' }}
+                onError={(e) => (e.target.style.display = 'none')}/>
+              ) : (
+                <p>Cargando...</p>
+              )}
+            </div>
+
+            <div>
               <p><strong>Precio Estimado:</strong> {disenioDetalles.precioEstimado}€</p>
               <p><strong>Fecha Estimada:</strong> {new Date(disenioDetalles.fechaEstimada).toLocaleDateString()}</p>
               <p><strong>Tipo de mueble:</strong> {disenioDetalles.tipo}</p>
-
-            <Form onSubmit={handleSubmit}>
-              {/* Datos del pedido */}
+         
+            
+            
+            <Form onSubmit={handleSave}>
+              
               <div className="custom-form-input">
                 <Label for="alto" className="custom-form-input-label">Alto</Label>
                 <Input
@@ -288,27 +785,138 @@ export default function Profile() {
                 <button className="auth-button">Guardar cambios</button>
               </div>
             </Form>
-            {disenioDetalles ? (
-                <img src={disenioDetalles.foto}
-                alt="Foto del diseño"
-                style={{ width: `${disenioDetalles.ancho}px`, height: `${disenioDetalles.alto}px`, borderRadius: '50%' }}
-                onError={(e) => (e.target.style.display = 'none')}/>
-              ) : (
-                <p>Cargando...</p>
-              )}
-
-            {/* Mostrar botones Aprobar y Desaprobar si el estado es "EN_REVISION" */}
-            {(
-              <div>
-                <Button color="success" onClick={() => encargarDisenio()}>Encargar</Button>
+            <div>
+                <Button color="success" onClick={(event) => encargarDisenio(event)}>Encargar</Button>
                 
                 <Button color="danger" onClick={()=> handleDeleteDisenio(disenioDetalles.id)}>Borrar disenio</Button>
               </div>
-            )}
+            
 
             <button color="secondary" onClick={cerrarModal}>Cerrar</button>
+            </div>
+            </div>
+            
+            
+          
+            
+              
           </div>
         )}
+
+{crearNuevoDisenio && 
+            <div style={{ display:"flex",flexDirection: "row"}}>
+            
+              <div>
+            
+                <img src="http://localhost:8080/resources/images/foto_prueba.jpg"
+                alt="Foto del diseño"
+                style={{ width: `${imageWidth}px`, height: `${imageHeight}px`, borderRadius: '50%',transition: 'all 0.3s ease-in-out' }}
+                onError={(e) => (e.target.style.display = 'none')}/>
+              
+            </div>
+
+            <div>
+              <p><strong>Precio Estimado:</strong>208.90€</p>
+              <p><strong>Fecha Estimada:</strong> {new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+
+
+
+              <div className="custom-form-input">
+                <Label for="nombre" className="custom-form-input-label">Nombre para el diseño</Label>
+                <Input
+                  type="text"
+                  name="nombre"
+                  id="nombre"
+                  value={disenioNuevo.nombre || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+
+
+
+              <div className="custom-form-input">
+                <Label for="tipo" className="custom-form-input-label">Tipo de mueble</Label>
+                <Input
+                  type="text"
+                  name="tipo"
+                  id="tipo"
+                  value={disenioNuevo.tipo || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+         
+            
+            
+            
+              
+              <div className="custom-form-input">
+                <Label for="alto" className="custom-form-input-label">Alto</Label>
+                <Input
+                  type="text"
+                  name="alto"
+                  id="alto"
+                  value={disenioNuevo.alto || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+             <div className="custom-form-input">
+                <Label for="ancho" className="custom-form-input-label">Ancho</Label>
+                <Input
+                  type="text"
+                  name="ancho"
+                  id="ancho"
+                  value={disenioNuevo.ancho || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+
+            
+              <div className="custom-form-input">
+                <Label for="fondo" className="custom-form-input-label">Fondo</Label>
+                <Input
+                  type="text"
+                  name="fondo"
+                  id="fondo"
+                  value={disenioNuevo.fondo || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
+                <Input
+                  type="text"
+                  name="tipoPuerta"
+                  id="tipoPuerta"
+                  value={disenioNuevo.tipoPuerta || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              <div className="custom-form-input">
+                <Label for="numPuertas" className="custom-form-input-label">Numero de puertas</Label>
+                <Input
+                  type="text"
+                  name="numPuertas"
+                  id="numPuertas"
+                  value={disenioNuevo.numPuertas || ""}
+                  onChange={handleChangeNuevo}
+                  className="custom-input"
+                />
+              </div>
+              
+            
+              <p style={{marginTop:20}}>(Una vez guardado podrá añadirle modulos a su diseño)</p>
+              <div className="custom-button-row">
+                <Button className="auth-button" onClick={(event)=> handleSubmitDisenioNuevo(event)}>Guardar cambios</Button>
+              </div>
+            
+            </div>
+            </div>}
       </div>
     </div>
   );

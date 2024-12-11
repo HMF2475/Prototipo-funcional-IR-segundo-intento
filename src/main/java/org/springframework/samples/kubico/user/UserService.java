@@ -1,21 +1,6 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.springframework.samples.kubico.user;
 
-import java.util.Optional;
+
 
 import jakarta.validation.Valid;
 
@@ -24,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.kubico.exceptions.AccessDeniedException;
 import org.springframework.samples.kubico.exceptions.ResourceNotFoundException;
-import org.springframework.samples.kubico.owner.Owner;
-import org.springframework.samples.kubico.vet.Vet;
-import org.springframework.samples.kubico.vet.VetService;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,15 +21,13 @@ public class UserService {
 
 	private UserRepository userRepository;
 	private final PasswordEncoder encoder;
-//	private OwnerService ownerService;
-//
-	private VetService vetService;
+
 
 	@Autowired
-	public UserService(UserRepository userRepository, VetService vetService, PasswordEncoder encoder) {
+	public UserService(UserRepository userRepository, PasswordEncoder encoder) {
 		this.userRepository = userRepository;
-//		this.ownerService = ownerService;
-		this.vetService = vetService;
+;
+
 		this.encoder = encoder;
 	}
 
@@ -67,22 +48,7 @@ public class UserService {
 		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 	}
 
-	@Transactional(readOnly = true)
-	public Owner findOwnerByUser(String username) {
-		return userRepository.findOwnerByUser(username)
-				.orElseThrow(() -> new ResourceNotFoundException("Owner", "username", username));
-	}
 
-	@Transactional(readOnly = true)
-	public Vet findVetByUser(int userId) {
-		return userRepository.findVetByUser(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("Vet", "id", userId));
-	}
-
-	@Transactional(readOnly = true)
-	public Owner findOwnerByUser(int id) {
-		return userRepository.findOwnerByUser(id).orElseThrow(() -> new ResourceNotFoundException("Owner", "ID", id));
-	}
 
 	@Transactional(readOnly = true)
 	public User findCurrentUser() {
@@ -119,9 +85,6 @@ public class UserService {
 	@Transactional
 	public void deleteUser(Integer id) {
 		User toDelete = findUser(id);
-		deleteRelations(id, toDelete.getAuthority().getAuthority());
-//		this.userRepository.deleteOwnerRelation(id);
-//		this.userRepository.deleteVetRelation(id);
 		this.userRepository.delete(toDelete);
 	}
 
@@ -144,25 +107,6 @@ public class UserService {
         } 
 	}
 
-	private void deleteRelations(Integer id, String auth) {
-		switch (auth) {
-		case "OWNER":
-//			Optional<Owner> owner = ownerService.optFindOwnerByUser(id);
-//			if (owner.isPresent())
-//				ownerService.deleteOwner(owner.get().getId());
-			this.userRepository.deleteOwnerRelation(id);
-			break;
-		case "VET":
-			Optional<Vet> vet = vetService.optFindVetByUser(id);
-			if (vet.isPresent()) {
-				vetService.deleteVet(vet.get().getId());
-			}
-			break;
-		default:
-			// The only relations that have user are Owner and Vet
-			break;
-		}
 
-	}
 
 }
