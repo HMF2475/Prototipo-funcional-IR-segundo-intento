@@ -961,7 +961,9 @@ export default function Profile() {
         />
       </div>
 
+
       {disenioNuevo.tipo !== "VESTIDOR" &&<div className="custom-form-input">
+
         <Label for="tipoPuerta" className="custom-form-input-label">Tipo puerta</Label>
         <Input
           type="text"
@@ -971,9 +973,10 @@ export default function Profile() {
           onChange={handleChangeNuevo}
           className="custom-input"
         />
+
       </div>}
 
-      {disenioNuevo.tipo === "ARMARIO" && <div className="custom-form-input">
+      {disenioNuevo.tipo !== "ARMARIO" && <div className="custom-form-input">
         <Label for="numPuertas" className="custom-form-input-label">Número de puertas</Label>
         <Input
           type="text"
