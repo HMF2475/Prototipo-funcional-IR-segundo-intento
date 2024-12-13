@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './OpenChat.css';
 
 function OpenChat() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [messages, setMessages] = useState([
+    { sender: 'Manolo Rodríguez', content: 'Buenas tardes, ¿Hacen pedidos a domicilio?', time: '3:00 PM' },
+    { sender: 'Tú', content: '¡Hola! ¿Cómo está? ¡Claro! Ahora puede realizar el pedido desde la web', time: '3:02 PM' },
+  ]);
+  const [newMessage, setNewMessage] = useState('');
 
   const chat = {
     id,
     name: 'Manolo Rodríguez Domínguez',
     date: '12/10/2024',
     type: 'Consulta general',
-    messages: [
-      { sender: 'Manolo Rodríguez', content: 'Hola buenassss, quería saber cuánto costaría un armario?', time: '3:00 PM' },
-      { sender: 'Tú', content: '¡Hola! ¿Cómo está? Ya mismo le digo.', time: '3:05 PM' },
-    ],
+  };
+
+  const handleSendMessage = () => {
+    if (newMessage.trim() !== '') {
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      setMessages([...messages, { sender: 'Tú', content: newMessage, time: currentTime }]);
+      setNewMessage('');
+    }
   };
 
   return (
@@ -25,10 +34,10 @@ function OpenChat() {
           <p className="chat-type">{chat.type}</p>
           <p className="chat-created">Creado {chat.date}</p>
         </div>
-        <button className="close-button" onClick={() => navigate(-1)}>X</button>
+        <button className="close-button" onClick={() => navigate('/chats')}>X</button>
       </div>
       <div className="chat-messages">
-        {chat.messages.map((message, index) => (
+        {messages.map((message, index) => (
           <div
             key={index}
             className={`message-bubble ${message.sender === 'Tú' ? 'sent' : 'received'}`}
@@ -39,7 +48,17 @@ function OpenChat() {
         ))}
       </div>
       <div className="message-input-container">
-        <input type="text" placeholder="Escribe aquí..." className="message-input" />
+        <input
+          type="text"
+          placeholder="Escribe aquí..."
+          className="message-input"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') handleSendMessage();
+          }}
+        />
+        <button className="send-button" onClick={handleSendMessage}>Enviar</button>
       </div>
     </div>
   );

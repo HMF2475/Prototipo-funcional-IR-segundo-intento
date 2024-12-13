@@ -19,7 +19,7 @@ import TodosLosPedidos from "./pedidosAdmin"
 import AdministrarUsuarios from "./administrarUsuarios"
 import Perfil from "./mi perfil"
 import ChatPage from "./chats"
-import OpenChat from "./chats"
+import OpenChat from "./chats/OpenChat";
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -70,7 +70,7 @@ function App() {
         <>
           <Route path="/pedidosInteriorista" exact={true} element={<PrivateRoute><PedidosInteriorista /></PrivateRoute>} />  
           <Route path="/chats" exact={true} element={<PrivateRoute><ChatPage /></PrivateRoute>} />  
-          <Route path="/chat/:id" element={<OpenChat />} />
+          <Route path="/privateChat" exact={true} element={<OpenChat />} />
         </>)
     }
     if (role === "MONTADOR") {

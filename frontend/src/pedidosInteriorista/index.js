@@ -23,7 +23,7 @@ export default function Profile() {
   );
 
 
-  useEffect(() => { //¿Hace falta que sea así?
+  useEffect(() => {
     let intervalId;
 
     function fetchPedidos() {
@@ -54,12 +54,11 @@ export default function Profile() {
   const modal = getErrorModal(setVisible, visible, message);
   const navigate = useNavigate();
 
-  // Función para redirigir a la página de inicio
+
   const goHome = () => {
     navigate("/");
   };
 
-  // Función para abrir los detalles del pedido
   const verDetallesPedido = (id) => {
     setPedidoId(id);
     fetch(`/api/kubico/pedidos/${id}`)
@@ -120,15 +119,8 @@ export default function Profile() {
     <div style={{ backgroundImage: '', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', height: '100vh', width: '100vw' }}>
       <div className="auth-page-container">
         {modal}
-
-        {/* Botón de cerrar para volver a home */}
-        <div style={{right: '10px', top: '80px', position: 'absolute'}}>
-          <button onClick={goHome} className="close-button">X</button>
-        </div>
-
-        {/* Tabla de pedidos */}
         {!mostrarDatosPedido && (
-          <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '600px', height: '800px' }}>
+          <div style={{ backgroundColor: 'white', borderRadius: '10px', width: '600px', height: '800px' }}>
             <h3>Lista de Pedidos</h3>
             {pedidos.length > 0 ? (
               <Table responsive>
@@ -163,7 +155,6 @@ export default function Profile() {
           </div>
         )}
 
-        {/* Modal de detalles del pedido */}
         {mostrarDatosPedido && pedidoDetalles && (
           <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width:'600px', height:'800px' }}>
             <h5>Referencia: {pedidoDetalles.referencia}</h5>
@@ -187,7 +178,6 @@ export default function Profile() {
               <p>Cargando...</p>
             )}
 
-            {/* Mostrar botones Aprobar y Desaprobar si el estado es "EN_REVISION" */}
             {pedidoDetalles.estado === "EN_REVISION" && (
               <div>
                 <Button color="success" onClick={() => aprobarPedido(pedidoDetalles.id, "si")}>Aprobar</Button>

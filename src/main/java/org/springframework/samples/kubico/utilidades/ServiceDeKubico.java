@@ -64,6 +64,7 @@ public class ServiceDeKubico {
         return (List<Cliente>) clienteRepository.findAll();
     }
 
+
     @Transactional(readOnly = true)
     public Interiorista findInterioristaByUserId(Integer userId) {
         return interioristaRepository.findByUser(userId)

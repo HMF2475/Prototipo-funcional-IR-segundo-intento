@@ -49,11 +49,7 @@ public class ControllerDeKubico {
     }
 
  
-    @GetMapping("/clientes")
-    public ResponseEntity<List<Cliente>> getAllClientes() {
-        List<Cliente> clientes = serviceDeKubico.findAllClientes();
-        return new ResponseEntity<>(clientes, HttpStatus.OK);
-    }
+
 
     @GetMapping("/interioristas/{userId}")
     public ResponseEntity<Interiorista> getInterioristaByUserId(@PathVariable Integer userId) {
