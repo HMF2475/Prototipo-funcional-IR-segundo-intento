@@ -21,6 +21,10 @@
   font-size: 5em;
 }
 
+.auth-form-container label {
+  color: white; /* Hace que los textos de las etiquetas sean blancos */
+}
+
 .options-row {
   display: flex;
   justify-content: space-evenly;

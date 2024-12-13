@@ -44,7 +44,7 @@ export default function Login() {
         )}
 
         
-          <h1>Iniciar sesion</h1>
+          <h1>Iniciar sesión</h1>
           <div className="recuadro">
             <div className="auth-form-container">
               <FormGenerator
