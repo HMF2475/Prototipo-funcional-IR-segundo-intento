@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Perfil {
-    // User
 	@NotBlank
 	private String username;
 	
@@ -17,7 +16,6 @@ public class Perfil {
 	@NotBlank
 	private String password;
 	
-	//Both
 	@NotBlank
 	private String firstName;
 	

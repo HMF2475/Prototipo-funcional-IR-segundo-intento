@@ -28,7 +28,7 @@ export default function Profile() {
     const updatedPerfil = {
         ...perfil,
         
-        password: newPassword ? newPassword : undefined // Solo incluir si hay una nueva contraseña
+        password: newPassword ? newPassword : undefined 
         
     };
     
@@ -84,7 +84,6 @@ export default function Profile() {
           <div className="auth-form-container">
             
              <Form onSubmit={handleSubmit}>
-              {/* Datos del Usuario */}
               <div className="custom-form-input">
                 <Label for="username" className="custom-form-input-label">Nombre de usuario</Label>
                 <Input

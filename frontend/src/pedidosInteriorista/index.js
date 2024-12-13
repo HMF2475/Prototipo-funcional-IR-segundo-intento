@@ -14,10 +14,6 @@ export default function Profile() {
   const [pedidoId, setPedidoId] = useState(null);
   const [pedidoDetalles, setPedidoDetalles] = useState(null);
   const [aprobarTrigger, setAprobarTrigger] = useState(0)
-
-
-
-  // Usamos el hook useFetchState para obtener los pedidos
   const [pedidos, setPedidos] = useFetchState(
     {}, "/api/kubico/pedidos", jwt, setMessage, setVisible
   );

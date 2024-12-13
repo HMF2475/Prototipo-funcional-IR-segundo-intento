@@ -14,20 +14,16 @@ export default function Profile() {
   const [pedidoId, setPedidoId] = useState(null);
   const [pedidoDetalles, setPedidoDetalles] = useState(null);
 
-  // Usamos el hook useFetchState para obtener los pedidos
   const [pedidos, setPedidos] = useFetchState(
     {}, "/api/kubico/pedidos/todos", jwt, setMessage, setVisible
   );
 
   const modal = getErrorModal(setVisible, visible, message);
   const navigate = useNavigate();
-
-  // Función para redirigir a la página de inicio
   const goHome = () => {
     navigate("/");
   };
 
-  // Función para abrir los detalles del pedido
   const verDetallesPedido = (id) => {
     setPedidoId(id);
     fetch(`/api/kubico/pedidos/${id}`)
@@ -42,9 +38,6 @@ export default function Profile() {
       });
   };
 
-  // Ordenar los pedidos por fecha (si es necesario)
-
-  // Cerrar el modal de detalles
   const cerrarModal = () => {
     setMostrarDatosPedido(false);
     setPedidoDetalles(null);
@@ -55,12 +48,10 @@ export default function Profile() {
       <div className="auth-page-container">
         {modal}
 
-        {/* Botón de cerrar para volver a home */}
         <div style={{right: '10px', top: '80px', position: 'absolute'}}>
           <button onClick={goHome} className="close-button">X</button>
         </div>
 
-        {/* Tabla de pedidos */}
         {!mostrarDatosPedido && (
           <div  style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width:'600px', height:'800px' }}>
             <h3>Lista de Pedidos</h3>
@@ -97,7 +88,6 @@ export default function Profile() {
           </div>
         )}
 
-        {/* Modal de detalles del pedido */}
         {mostrarDatosPedido && pedidoDetalles && (
           <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width:'600px', height:'800px' }}>
             

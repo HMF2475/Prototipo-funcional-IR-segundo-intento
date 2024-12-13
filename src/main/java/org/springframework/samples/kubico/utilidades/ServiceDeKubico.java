@@ -350,10 +350,8 @@ public class ServiceDeKubico {
 
 
 
-    //TODO CAMBIAR MODULOS
     @Transactional
     public Disenio actualizarDisenio(Disenio disenioNuevo) {
-        // Buscar el diseño por su ID
         Disenio disenio = disenioRepository.findById(disenioNuevo.getId())
         .orElseThrow(() -> new NotFoundException("No se encontró el diseño con ID " + disenioNuevo.getId()));
 

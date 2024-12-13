@@ -45,7 +45,7 @@ export default function Profile() {
   
 
 
-  useEffect(() => { //¿Hace falta que sea así?
+  useEffect(() => {
     let intervalId;
 
     function fetchDisenios() {
@@ -76,12 +76,10 @@ export default function Profile() {
   const modal = getErrorModal(setVisible, visible, message);
   const navigate = useNavigate();
 
-  // Función para redirigir a la página de inicio
   const goHome = () => {
     navigate("/");
   };
 
-  // Función para abrir los detalles del disenio
   const verDetallesDisenio = (id) => {
     setDisenioId(id);
     fetch(`/api/kubico/disenios/${id}`)
@@ -590,13 +588,12 @@ export default function Profile() {
     <h5>Nombre: {disenioDetalles.nombre}</h5>
 
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      {/* Sección de Módulos (Izquierda) */}
       <div style={{ flex: 1, marginRight: '20px' }}>
         <h5>Lista de módulos</h5>
         <Button 
           style={{ 
-            backgroundColor: '#a0c4e9',  // Azul más suave
-            borderColor: '#7ea9d1',        // Bordes más suaves
+            backgroundColor: '#a0c4e9',
+            borderColor: '#7ea9d1',
             color: '#fff', 
             borderRadius: '20px',
             transition: 'background-color 0.3s ease'
@@ -732,7 +729,6 @@ export default function Profile() {
         </Collapse>
       </div>
 
-      {/* Sección de Foto (Centro) */}
       <div style={{ flex: 1, textAlign: 'center', marginRight: '60px' }}>
         {disenioDetalles ? (
           <img
@@ -746,7 +742,6 @@ export default function Profile() {
         )}
       </div>
 
-      {/* Sección del Resto de los Detalles (Derecha) */}
       <div style={{ flex: 1 }}>
         <p><strong>Precio Estimado:</strong> {disenioDetalles.precioEstimado}€</p>
         <p><strong>Fecha Estimada:</strong> {new Date(disenioDetalles.fechaEstimada).toLocaleDateString()}</p>

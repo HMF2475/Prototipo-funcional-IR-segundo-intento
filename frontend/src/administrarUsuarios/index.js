@@ -217,7 +217,6 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
        
             <h3>Nombre de usuario: {perfil.username}</h3>
              <Form onSubmit={handleSubmit}>
-              {/* Datos del Usuario */}
               
               {perfil.authority !== "CLIENTE" && <div className="custom-form-input">
   <Label for="authority" className="custom-form-input-label">Rol</Label>
@@ -334,7 +333,6 @@ const [añadirUsuarioMostrar, setAñadirUsuarioMostrar]=useState(false)
       <h1>Añadir usuario</h1>
       <div className="auth-form-container">
       <Form onSubmit={handleSubmitNuevo}>
-              {/* Datos del Usuario */}
               <div className="custom-form-input">
                 <Label for="username" className="custom-form-input-label">Nombre de usuario</Label>
                 <Input
