@@ -539,12 +539,6 @@ export default function Profile() {
       <div className="auth-page-container">
         {modal}
 
-        {/* Botón de cerrar para volver a home */}
-        <div style={{right: '10px', top: '80px', position: 'absolute'}}>
-          <button onClick={goHome} className="close-button">X</button>
-        </div>
-
-        {/* Tabla de disenios */}
         {!mostrarDatosDisenio && !crearNuevoDisenio && (
   <div style={{ marginTop: '20px', backgroundColor: '#4d5650', padding: '20px', borderRadius: '5px', width: '600px', height: '800px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: '20px' }}>
@@ -591,28 +585,6 @@ export default function Profile() {
   </div>
 )}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        {/* Modal de detalles del disenio */}
 {mostrarDatosDisenio && disenioDetalles && !crearNuevoDisenio && (
   <div style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '5px', width: '100%', maxWidth: '1200px' }}>
     <h5>Nombre: {disenioDetalles.nombre}</h5>
@@ -853,29 +825,6 @@ export default function Profile() {
     </div>
   </div>
 )}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 {crearNuevoDisenio && (
   <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>

@@ -52,7 +52,7 @@ INSERT INTO modulos(id,ancho,alto,fondo,iluminacion,tipo_material, num_cajoneras
  
 
 INSERT INTO pedido (id, referencia, precio, cliente_id, interiorista_id, disenio_id, montador_id, fecha_estimada, fecha_pedido,  estado, pagado) VALUES 
-                    (1,'prueba',     1500.00, 1,              1,              3,           1,       '2024-01-15', '2023-12-01', 'ACEPTADO','50%');
+                    (1,'prueba',     1500.00, 1,              1,              3,           1,       '2024-01-15', '2023-12-01', 'EN_REPARTO','90%');
 INSERT INTO pedido (id, referencia, precio, cliente_id, interiorista_id, disenio_id, montador_id, fecha_estimada, fecha_pedido,  estado, pagado) VALUES 
                     (2, 'prueba2',     2500.00, 2,           2,              1         ,NULL,         '2024-02-20', '2023-12-03', 'EN_REVISION' ,'Pendiente de Pago');
 INSERT INTO pedido (id, referencia, precio, cliente_id, interiorista_id, disenio_id,montador_id, fecha_estimada, fecha_pedido,  estado, pagado) VALUES 

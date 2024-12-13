@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ChatComponent.css';
 
-const ChatComponent = ({ closeChat }) => {
+const ChatComponent = ({ closeChat, interfaz }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
@@ -15,8 +15,11 @@ const ChatComponent = ({ closeChat }) => {
     setNewMessage('');
 
     setTimeout(() => {
-      const botResponse = { user: 'Amigo', text: 'Será atendido en breves instantes...', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-      setMessages((prevMessages) => [...prevMessages, botResponse]);
+      if(interfaz!=='Montador'){
+        const botResponse = { user: 'Amigo', text: 'Será atendido en breves instantes...', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+        setMessages((prevMessages) => [...prevMessages, botResponse]);
+      }
+
     }, 3000);
   };
 
