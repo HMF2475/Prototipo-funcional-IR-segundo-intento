@@ -87,8 +87,8 @@ export default function Profile() {
 
         {/* Tabla de pedidos */}
         {!mostrarDatosPedido && (
-          <div  style={{ marginTop: '20px', backgroundColor: 'white', padding: '20px', borderRadius: '10px', width:'600px', height:'800px' }}>
-            <h3>Lista de Pedidos</h3>
+          <div  style={{ marginTop: '20px',  backgroundColor: '#4d5650', padding: '20px', borderRadius: '10px', width:'600px', height:'800px' }}>
+            <h3 style={{color: '#ffffff'}}>Lista de Pedidos</h3>
             {pedidos.length > 0 ? (
               <Table responsive>
                 <thead>
