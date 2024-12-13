@@ -74,6 +74,7 @@ export default function Register() {
     return (
       <div className="auth-page-container">
         <h1>Registrarse</h1>
+        <div style={{backgroundColor:'#4d5650'}}>
         <div className="auth-form-container">
           <FormGenerator
             ref={registerFormRef}
@@ -84,6 +85,7 @@ export default function Register() {
             buttonText="Save"
             buttonClassName="auth-button"
           />
+        </div>
         </div>
       </div>
     );

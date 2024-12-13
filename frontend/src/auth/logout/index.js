@@ -19,8 +19,8 @@ const Logout = () => {
     <div className="auth-page-container">
       <div className="auth-form-container">
       <div className="recuadro-logout">
-        <h2 className="text-center text-md">
-          Are you sure you want to log out?
+        <h2 style={{color:'#fffff', textAlign:'center'}}>
+          ¿Seguro que quieres cerrar sesión?
         </h2>
         <div className="options-row">
           <Link className="auth-button-cancelar" to="/" style={{textDecoration: "none"}}>
