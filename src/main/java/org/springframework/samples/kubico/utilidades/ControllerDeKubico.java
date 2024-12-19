@@ -22,6 +22,7 @@ import org.springframework.samples.kubico.user.User;
 import org.springframework.samples.kubico.user.UserService;
 
 import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -35,10 +36,11 @@ public class ControllerDeKubico {
     private final UserService userService;
     private final AuthoritiesService authoritiesService;
     @Autowired
-    public ControllerDeKubico(ServiceDeKubico serviceDeKubico, UserService userService, AuthoritiesService authoritiesService) {
+    public ControllerDeKubico(ServiceDeKubico serviceDeKubico, UserService userService, AuthoritiesService authoritiesService, PasswordEncoder encoder) {
         this.serviceDeKubico = serviceDeKubico;
         this.userService = userService;
         this.authoritiesService = authoritiesService;
+        this.encoder = encoder;
     }
 
 
@@ -258,6 +260,7 @@ public class ControllerDeKubico {
         return ResponseEntity.ok("Hecho"); 
         
     }
+    private final PasswordEncoder encoder;
 
     @PostMapping("/perfil/crearOtro")
     public ResponseEntity<?> crearProfile(@RequestBody Perfil perfil) {
@@ -267,9 +270,14 @@ public class ControllerDeKubico {
         
         User userToUpdate = new User();
         
-        userToUpdate.setPassword(perfil.getPassword());
+        userToUpdate.setPassword(encoder.encode(perfil.getPassword()));
         userToUpdate.setUsername(perfil.getUsername());
+        if(perfil.getAuthority()==null){
+            perfil.setAuthority("CLIENTE");    
+        }
         userToUpdate.setAuthority(authoritiesService.findByAuthority(perfil.getAuthority().toUpperCase()));
+        
+        
         userService.saveUser(userToUpdate);
         
     

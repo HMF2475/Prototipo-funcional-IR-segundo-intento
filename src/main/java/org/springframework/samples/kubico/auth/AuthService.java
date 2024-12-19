@@ -41,7 +41,7 @@ private final ServiceDeKubico serviceDeKubico;
 	}
 
 	@Transactional
-	public void createUser(@Valid SignupRequest request) {
+	public void createUser(SignupRequest request) {
 		User user = new User();
 		user.setUsername(request.getUsername());
 		user.setPassword(encoder.encode(request.getPassword()));

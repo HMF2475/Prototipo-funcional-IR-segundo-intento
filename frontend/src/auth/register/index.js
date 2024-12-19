@@ -1,94 +1,164 @@
-import "../../static/css/auth/authButton.css";
-import "../../static/css/auth/authPage.css";
-import tokenService from "../../services/token.service";
-import FormGenerator from "../../components/formGenerator/formGenerator";
-import { registerFormInputs } from "./form/registerFormClinicOwnerInputs";
+
 import { useEffect, useRef, useState } from "react";
+import { Button, Table, Form, Input, Label, Link } from 'reactstrap';
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-  let [type, setType] = useState(null);
-  let [authority, setAuthority] = useState(null);
 
-  const registerFormRef = useRef();
+  const [perfilNuevo, setPerfilNuevo] = useState({})
+  const sexos = ["Hombre", "Mujer", "Otro"];
+    const navigate = useNavigate();
 
-  function handleButtonClick(event) {
+  function handleChangeNuevo(event) {
     const target = event.target;
-    let value = target.value;
-    if (value === "Back") value = null;
-    else setAuthority(value);
-    setType(value);
+    const value = target.value;
+    const name = target.name;
+    setPerfilNuevo({ ...perfilNuevo, [name]: value });
   }
 
-  function handleSubmit({ values }) {
+  function handleSubmitNuevo(event) {
+    event.preventDefault();
+    const updatedPerfil = {
+      ...perfilNuevo,
+      sexo: perfilNuevo.sexo?.toUpperCase(),
+      authority: "CLIENTE"
 
-    if(!registerFormRef.current.validate()) return;
 
-    const request = values;
-    request["authority"] = "CLIENTE";
-    let state = "";
+
+    };
     
 
-    fetch("/api/v1/auth/signup", {
-      headers: { "Content-Type": "application/json" },
+    fetch("/api/kubico/perfil/crearOtro", {
       method: "POST",
-      body: JSON.stringify(request),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedPerfil),
     })
-      .then(function (response) {
-        if (response.status === 200) {
-          const loginRequest = {
-            username: request.username,
-            password: request.password,
-          };
-
-          fetch("/api/v1/auth/signin", {
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-            body: JSON.stringify(loginRequest),
-          })
-            .then(function (response) {
-              if (response.status === 200) {
-                state = "200";
-                return response.json();
-              } else {
-                state = "";
-                return response.json();
-              }
-            })
-            .then(function (data) {
-              if (state !== "200") alert(data.message);
-              else {
-                tokenService.setUser(data);
-                tokenService.updateLocalAccessToken(data.token);
-                window.location.href = "/dashboard";
-              }
-            })
-            .catch((message) => {
-              alert(message);
-            });
-        }
+      .then((response) => response.text())
+      .then((data) => {
+        navigate("/login")
       })
-      .catch((message) => {
-        alert(message);
-      });
+      .catch((error) => alert(error.message));
   }
 
-    return (
-      <div className="auth-page-container">
-        <h1>Registrarse</h1>
-        <div style={{backgroundColor:'#4d5650'}}>
+  return (
+    <div className="auth-page-container">
+      <h1>Registrarse</h1>
+      <div style={{ backgroundColor: '#4d5650' }}>
         <div className="auth-form-container">
-          <FormGenerator
-            ref={registerFormRef}
-            inputs={registerFormInputs}
-            onSubmit={handleSubmit}
-            numberOfColumns={1}
-            listenEnterKey
-            buttonText="Save"
-            buttonClassName="auth-button"
-          />
-        </div>
+          <Form onSubmit={handleSubmitNuevo}>
+            <div className="custom-form-input">
+              <Label for="username" className="custom-form-input-label">Nombre de usuario</Label>
+              <Input
+                type="text"
+                name="username"
+                id="username"
+                value={perfilNuevo.username || ""}
+                onChange={handleChangeNuevo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">
+              <Label for="password" className="custom-form-input-label">Contraseña</Label>
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                value={perfilNuevo.password || ""}
+                onChange={handleChangeNuevo}
+                className="custom-input"
+              />
+            </div>
+
+
+
+            <div className="custom-form-input">
+              <Label for="firstName" className="custom-form-input-label">Nombre</Label>
+              <Input
+                type="text"
+                name="firstName"
+                id="firstName"
+                value={perfilNuevo.firstName || ""}
+                onChange={handleChangeNuevo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">
+              <Label for="second_name" className="custom-form-input-label">Segundo nombre</Label>
+              <Input
+                type="text"
+                name="second_name"
+                id="second_name"
+                value={perfilNuevo.second_name || ""}
+                onChange={handleChangeNuevo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">
+              <Label for="lastName" className="custom-form-input-label">Apellido</Label>
+              <Input
+                type="text"
+                name="lastName"
+                id="lastName"
+                value={perfilNuevo.lastName || ""}
+                onChange={handleChangeNuevo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">
+              <Label for="telefono" className="custom-form-input-label">Telefono</Label>
+              <Input
+                type="phone"
+                name="telefono"
+                id="telefono"
+                value={perfilNuevo.telefono || ""}
+                onChange={handleChangeNuevo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">
+              <Label for="direccion" className="custom-form-input-label">Direccion</Label>
+              <Input
+                type="text"
+                name="direccion"
+                id="direccion"
+                value={perfilNuevo.direccion || ""}
+                onChange={handleChangeNuevo}
+                className="custom-input"
+              />
+            </div>
+            <div className="custom-form-input">
+              <Label for="sexo" className="custom-form-input-label">Sexo</Label>
+              <Input
+                type="select"
+                name="sexo"
+                id="sexo"
+                value={perfilNuevo.sexo || ""}
+                onChange={handleChangeNuevo}
+                className="custom-input"
+              >
+                <option value="" disabled>Selecciona una opción</option>
+                {sexos.map((sexo) => (
+                  <option key={sexo} value={sexo.toUpperCase()}>
+                    {sexo}
+                  </option>
+                ))}
+              </Input>
+            </div>
+
+
+
+            <div className="custom-button-row">
+              <button className="auth-button">Guardar</button>
+                <Button onClick={()=> navigate("/")}>Volver</Button>
+            </div>
+          </Form>
         </div>
       </div>
-    );
+      </div>
+      );
+      
   
 }

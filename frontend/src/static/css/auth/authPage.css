@@ -22,7 +22,7 @@
 }
 
 .auth-form-container label {
-  color: white; /* Hace que los textos de las etiquetas sean blancos */
+  color: black; /* Hace que los textos de las etiquetas sean blancos */
 }
 
 .options-row {
