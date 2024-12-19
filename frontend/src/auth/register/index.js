@@ -24,8 +24,9 @@ export default function Register() {
     if(!registerFormRef.current.validate()) return;
 
     const request = values;
-    request["authority"] = authority;
+    request["authority"] = "CLIENTE";
     let state = "";
+    
 
     fetch("/api/v1/auth/signup", {
       headers: { "Content-Type": "application/json" },

@@ -5,12 +5,12 @@ INSERT INTO authorities(id,authority) VALUES (3,'INTERIORISTA');
 INSERT INTO authorities(id,authority) VALUES (4,'MONTADOR');
 
 -- PROYECTO IR
-INSERT INTO appusers(id,username,password,authority) VALUES (101,'admin','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',1);
-INSERT INTO appusers(id,username,password,authority) VALUES (102,'cliente1','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
-INSERT INTO appusers(id,username,password,authority) VALUES (106,'cliente2','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
-INSERT INTO appusers(id,username,password,authority) VALUES (103,'interiorista1','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',3);
-INSERT INTO appusers(id,username,password,authority) VALUES (105,'interiorista2','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',3);
-INSERT INTO appusers(id,username,password,authority) VALUES (104,'montador1','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',4);
+INSERT INTO appusers(id,username,password,authority) VALUES (101,'admin','$2a$10$Re4EHEzk7TZovQPu9jnT0OiXBVWjvPemB1WGx2TrdMkWfc2oO5Gla',1);
+INSERT INTO appusers(id,username,password,authority) VALUES (102,'cliente1','$2a$10$Re4EHEzk7TZovQPu9jnT0OiXBVWjvPemB1WGx2TrdMkWfc2oO5Gla',2);
+INSERT INTO appusers(id,username,password,authority) VALUES (106,'cliente2','$2a$10$Re4EHEzk7TZovQPu9jnT0OiXBVWjvPemB1WGx2TrdMkWfc2oO5Gla',2);
+INSERT INTO appusers(id,username,password,authority) VALUES (103,'interiorista1','$2a$10$Re4EHEzk7TZovQPu9jnT0OiXBVWjvPemB1WGx2TrdMkWfc2oO5Gla',3);
+INSERT INTO appusers(id,username,password,authority) VALUES (105,'interiorista2','$2a$10$Re4EHEzk7TZovQPu9jnT0OiXBVWjvPemB1WGx2TrdMkWfc2oO5Gla',3);
+INSERT INTO appusers(id,username,password,authority) VALUES (104,'montador1','$2a$10$Re4EHEzk7TZovQPu9jnT0OiXBVWjvPemB1WGx2TrdMkWfc2oO5Gla',4);
 
 
 
